@@ -1,0 +1,11 @@
+BoldAsFont=no
+CursorType=block
+Font=Consolas
+FontHeight=10
+Locale=en_US
+Charset=UTF-8
+CopyAsRTF=no
+ClicksTargetApp=no
+Columns=100
+Rows=49
+Term=xterm-256color
