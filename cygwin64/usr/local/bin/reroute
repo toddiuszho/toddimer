@@ -1,0 +1,88 @@
+#!/bin/bash
+
+#
+# routeadd: add Rackspace network segments to Windows routing table.
+#
+# Options:
+#   -d -- delete all previously added routes from routing table
+#
+
+function usage()
+{
+  echo "Usage:" >&2
+  echo "  reroute [-l LOG]" >&2
+  echo "  reroute -d [-l LOG]" >&2
+  echo "  reroute -h" >&2
+  echo "" >&2
+  echo "Options:" >&2
+  echo "  -d        Delete all routes" >&2
+  echo "  -h        This help screen" >&2
+  echo "  -l LOG    Log output from route commands to file LOG" >&2
+}
+
+_log=/dev/null
+declare -i _delete=0
+while getopts "dhl:" opt; do
+  case $opt in
+     d) _delete=1;;
+     h) usage; exit 0;;
+     l) _log="$OPTARG"; echo "Logging to $_log.";;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+_gateway=$(ipconfig | grep -A 3 'VPN' | grep IPv4 | cut -d ':' -f 2 | cut -d ' ' -f 2)
+_weight=54
+if [ -z "${_gateway}" ]; then
+  echo "Could not find gateway!" >&2
+  exit 1
+else
+  echo "Gateway: $_gateway"
+fi
+
+function routeadd()
+{
+  route add "$1" MASK "$2" "$_gateway" METRIC $_weight > $_log 2>&1
+  result=$?
+  if [ $result -eq 0 ]; then
+    echo "Successfully added route for [$3]. "
+  else
+    echo "Failed to add route for [$3]!"
+  fi
+}
+
+function routeremove()
+{
+  route delete "$1" > $_log 2>&1
+  result=$?
+  if [ $result -eq 0 ]; then
+    echo "Successfully removed route for [$2]."
+  else
+    echo "Failed to remove route for [$2]!"
+  fi
+}
+
+declare -A routes=(
+  [inside]='([name]="Inside Segment" [ip]="172.20.100.0" [mask]="255.255.255.0")'
+  [bal001]='([name]="Balancer"       [ip]="172.20.119.0" [mask]="255.255.255.0")'
+  [dmz001]='([name]="DMZ Web"        [ip]="172.20.120.0" [mask]="255.255.252.0")'
+  [dmz002]='([name]="DMZ FTP"        [ip]="172.20.124.0" [mask]="255.255.252.0")'
+  [svc001]='([name]="ServiceNet 1"   [ip]="10.176.0.0"   [mask]="255.240.0.0")'
+  [svc002]='([name]="ServiceNet 2"   [ip]="10.208.0.0"   [mask]="255.240.0.0")'
+)
+
+for rt in "${!routes[@]}"; do
+  #echo "ref  = ${rt}"
+  declare -A "${rt}AA=${routes[$rt]}"
+  for key in name ip mask; do
+    eval ${key}'=${'${rt}'AA['$key']}'
+  done
+  if [ $_delete -eq 0 ]; then
+    routeadd "$ip" "$mask" "$name"
+  else
+    routeremove "$ip" "$name"
+  fi
+done
+
+exit 0
+
