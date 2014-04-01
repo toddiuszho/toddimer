@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#
+# replace
+#
+# Features:
+#   Replace all tokens in a file with key/value pairs from a properties file
+#
+# Arguments:
+#   0 - properties file with key/value pairs to search/replace
+#   1 - input file
+#       Default: stdin
+#   2 - output file
+#       Default: stdout
+# 
+
+EL_LIB=/var/lib/cmdel
+java -cp $EL_LIB/cmdel.jar:$EL_LIB/velocity-1.5.jar:$EL_LIB/velocity-dep-1.5.jar \
+    com.viverae.cmdel.Replace $*

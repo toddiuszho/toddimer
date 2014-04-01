@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Env
+_USER=""
+_HOST=""
+
+# Usage
+function usage()
+{
+  echo "Usage: keygen -h HOST (-u username | -U | -W)" >&2
+  echo "Options:" >&2
+  echo "  -h   remote host to generate keys for" >&2
+  echo "  -u   remote username" >&2
+  echo "  -U   use standard Unix username " >&2
+  echo "  -W   use standard  Windows username" >&2
+}
+
+# Options
+while getopts "h:Uu:W" opt; do
+  case "$opt" in
+    h) _HOST="$OPTARG";;
+    u) _USER="$OPTARG";;
+    U) _USER="$USER";;
+    W) _USER="Administrator";;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+# Validation
+if [ -z "$_HOST" ]; then
+  echo "No host specified!" >&2
+  usage
+  exit 1
+fi
+if [ -z "$_USER" ]; then
+  echo "No username specified!" >&2
+  usage
+  exit 1
+fi
+
+# Exec
+_extless=${_USER}-${_HOST}
+echo "Creating keys for ${_USER}@${_HOST}" >&2
+
+ssh-keygen -t rsa -C "${_USER}@${_HOST}" -N '' -f ~/.ssh/${_extless}.pri
+if [ $? -ne 0 ]; then
+  echo "Key generation failed!" >&2
+  exit 1
+fi
+
+mv ~/.ssh/${_extless}.pri.pub ~/.ssh/${_extless}.pub
+if [ $? -ne 0 ]; then
+  echo "Public key rename failed!" >&2
+  exit 1
+fi
+
+# Bug in ssh-copy-id that INSISTS on BOTH:
+#   ~/.ssh/keyname
+#   ~/.ssh/keyname.pub
+cp ~/.ssh/${_extless}.pub ~/.ssh/${_extless}
+if [ $? -ne 0 ]; then
+  echo "Public key copy failed!" >&2
+  exit 1
+fi
+
+ssh-copy-id -i ~/.ssh/${_extless} ${_USER}@${_HOST}
+if [ $? -ne 0 ]; then
+  echo "Public key remote transfer failed!" >&2
+  exit 1
+fi
+
+# Workaround
+rm ~/.ssh/${_extless}
+if [ $? -ne 0 ]; then
+  echo "Public key copy removal failed!" >&2
+  exit 1
+fi
+
+/usr/local/bin/puttygen ~/.ssh/${_extless}.pri -C "${_USER}@${_HOST}" -o ~/.ssh/${_extless}.ppk
+if [ $? -ne 0 ]; then
+  echo "PuTTY translation failed!" >&2
+  exit 1
+fi
+

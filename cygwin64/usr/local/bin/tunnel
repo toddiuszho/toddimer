@@ -1,0 +1,120 @@
+#!/bin/bash
+
+#
+# Creates and maintains a remote tunnel. Or destroy it!
+#
+
+# Cygiwn only!
+if [ `uname -o` != 'Cygwin' ]; then
+  echo "This command is for Cygwin only!" >&2
+  exit 1
+fi
+
+# Setup
+_tunnel_name=""
+_remote_user="$USER"
+_remote_host=""
+_remote_interface="localhost"
+_local_interface=""
+declare -i _n=0 _local_port=0 _remote_port=0 _destroy=1
+
+# Usage
+function usage()
+{
+  echo "" >&2
+  echo "Usage:" >&2
+  echo "  tunnel -t TUNNEL_NAME [ -u REMOTE_USER ] -h REMOTE_HOST -l LOCAL_PORT -r REMOTE_PORT [ -i REMOTE_INTERFACE ] [-b LOCAL_INTERFACE]" >&2
+  echo "  tunnel -t TUNNEL_NAME -D" >&2
+  echo "" >&2
+  echo "Options:" >&2
+  echo "  -t TUNNEL_NAME       Name to give this tunnel for lookups/uniqueness" >&2
+  echo "  -D                   Destroy named tunnel" >&2
+  echo "  -u REMOTE_USER       Remote username to login with on remote host" >&2
+  echo "                       Defaults to environment USER" >&2
+  echo "  -h REMOTE_HOST       Name/IP of remote host to SSH to" >&2
+  echo "  -l LOCAL_PORT        Local port number to tunnel from" >&2
+  echo "  -r REMOTE_PORT       Remote port number to tunnel to" >&2
+  echo "  -i REMOTE_INTERFACE  Remote interface tunneled to service listens on"
+  echo "                       Defaults to localhost." >&2
+  echo "  -b LOCAL_INTERFACE   Local interface to tunnel on"
+  echo "                       Defaults to localhost." >&2
+  echo "" >&2
+}
+
+# Wrangle options
+while getopts "Dt:l:r:u:h:i:b:" opt; do
+  case "$opt" in
+    D) _destroy=0;;
+    t) _tunnel_name="$OPTARG";;
+    l) _local_port="$OPTARG";;
+    r) _remote_port="$OPTARG";;
+    u) _remote_user="$OPTARG";;
+    h) _remote_host="$OPTARG";;
+    i) _remote_interface="$OPTARG";;
+    b) _local_interface="${OPTARG}:";;
+  esac
+done
+
+# Validate named parameter is non-empty and a number
+function validate_number()
+{
+  if [ -z "$2" ] || [ "$2" -ne "$2" ]; then
+    echo "$1 cannot be empty and must be a positive integer!" >&2
+    usage
+    exit 1
+  fi
+}
+
+# Validate named parameter is non-empty
+function validate_string()
+{
+  if [ -z "$2" ]; then
+    echo "$1 cannot be empty!" >&2
+    usage
+    exit 1
+  fi
+}
+
+# Destroy a previously created tunnel
+function destroy_tunnel()
+{
+  local PIDFILE=/var/run/${_tunnel_name}.pid;
+  if [ -f $PIDFILE ]; then
+    local pid=$(cat $PIDFILE);
+    ps | awk '{print $1 "-" $2 "-"}' | grep -Po "\d+(?=-$pid-)" | xargs -r kill -9;
+    ps -p $pid > /dev/null 2>&1
+    [ $? -eq 0 ] && kill -9 $pid
+    \rm $PIDFILE;
+  else
+    echo "Cannot find TUNNEL_NAME=[${_tunnel_name}]!" >&2
+    return 1
+  fi
+}
+
+# Validation
+validate_string "TUNNEL_NAME"      "$_tunnel_name"
+if [ "$_destroy" -ne 0 ]; then
+  validate_string "REMOTE_USER"      "$_remote_user"
+  validate_string "REMOTE_HOST"      "$_remote_host"
+  validate_string "REMOTE_INTERFACE" "$_remote_interface"
+  validate_number "LOCAL_PORT"       "$_local_port"
+  validate_number "REMOTE_PORT"      "$_remote_port"
+fi
+
+
+# Exec
+if [ "$_destroy" -eq 0 ]; then
+  destroy_tunnel
+  exit $?
+else
+  echo $$ > "/var/run/${_tunnel_name}.pid"
+  echo "Tunneling [ ssh -N -c arcfour -L ${_local_interface}${_local_port}:${_remote_interface}:${_remote_port} ${_remote_user}@${_remote_host} ]" >&2
+  until ssh -N -c arcfour -L ${_local_interface}${_local_port}:${_remote_interface}:${_remote_port} ${_remote_user}@${_remote_host} > "/var/log/${_tunnel_name}.log" 2>&1; do
+    if [ $_n -eq 60 ]; then
+      exit
+    fi
+    _n=$(( $_n + 1 ))
+    sleep 2
+  done
+fi
+

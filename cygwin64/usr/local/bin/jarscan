@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#
+# jarscan: scan table contents of all JARs in CWD for passed in grep pattern
+#
+# Arguments:
+#   @ -- arguments to pass to grep to scan JAR tables for
+#
+
+for jar in *.jar; do
+  out=$(jar -tf $(cygpath -aw "$jar") | grep -P $@)
+  if [ -n "$out" ]; then
+    echo -e "$jar\n---\n$out\n"
+  fi
+done
+
