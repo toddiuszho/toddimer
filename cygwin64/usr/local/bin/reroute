@@ -23,10 +23,10 @@ usage()
 }
 
 _log=/dev/null
-declare -i _delete=0
+declare -i _delete=1
 while getopts "dhl:" opt; do
   case $opt in
-     d) _delete=1;;
+     d) _delete=0;;
      h) usage; exit 0;;
      l) _log="$OPTARG"; echo "Logging to $_log.";;
   esac
@@ -89,8 +89,9 @@ for rt in "${!routes[@]}"; do
     eval ${key}'=${'${rt}'AA['$key']}'
   done
   suffix="${cidr#*/}"
+  ip="${cidr%/*}"
   mask=`cidr2mask $suffix`
-  if [ $_delete -eq 0 ]; then
+  if [ $_delete -ne 0 ]; then
     routeadd "$ip" "$mask" "$name"
   else
     routeremove "$ip" "$name"
