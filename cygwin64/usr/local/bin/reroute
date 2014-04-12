@@ -7,7 +7,9 @@
 #   -d -- delete all previously added routes from routing table
 #
 
-function usage()
+. "/usr/local/lib/net.sh"
+
+usage()
 {
   echo "Usage:" >&2
   echo "  reroute [-l LOG]" >&2
@@ -40,7 +42,7 @@ else
   echo "Gateway: $_gateway"
 fi
 
-function routeadd()
+routeadd()
 {
   route add "$1" MASK "$2" "$_gateway" METRIC $_weight > $_log 2>&1
   result=$?
@@ -51,7 +53,7 @@ function routeadd()
   fi
 }
 
-function routeremove()
+routeremove()
 {
   route delete "$1" > $_log 2>&1
   result=$?
@@ -62,21 +64,32 @@ function routeremove()
   fi
 }
 
+#declare -A routes=(
+#  [inside]='([name]="Inside Segment" [ip]="172.20.100.0" [mask]="255.255.255.0")'
+#  [bal001]='([name]="Balancer"       [ip]="172.20.119.0" [mask]="255.255.255.0")'
+#  [dmz001]='([name]="DMZ Web"        [ip]="172.20.120.0" [mask]="255.255.252.0")'
+#  [dmz002]='([name]="DMZ FTP"        [ip]="172.20.124.0" [mask]="255.255.252.0")'
+#  [svc001]='([name]="ServiceNet 1"   [ip]="10.176.0.0"   [mask]="255.240.0.0")'
+#  [svc002]='([name]="ServiceNet 2"   [ip]="10.208.0.0"   [mask]="255.240.0.0")'
+#)
 declare -A routes=(
-  [inside]='([name]="Inside Segment" [ip]="172.20.100.0" [mask]="255.255.255.0")'
-  [bal001]='([name]="Balancer"       [ip]="172.20.119.0" [mask]="255.255.255.0")'
-  [dmz001]='([name]="DMZ Web"        [ip]="172.20.120.0" [mask]="255.255.252.0")'
-  [dmz002]='([name]="DMZ FTP"        [ip]="172.20.124.0" [mask]="255.255.252.0")'
-  [svc001]='([name]="ServiceNet 1"   [ip]="10.176.0.0"   [mask]="255.240.0.0")'
-  [svc002]='([name]="ServiceNet 2"   [ip]="10.208.0.0"   [mask]="255.240.0.0")'
+  [inside]='([name]="Inside Segment" [cidr]="172.20.100.0/24")'
+  [bal001]='([name]="Balancer"       [cidr]="172.20.119.0/32")'
+  [dmz001]='([name]="DMZ Web"        [cidr]="172.20.120.0/22")'
+  [dmz002]='([name]="DMZ FTP"        [cidr]="172.20.124.0/22")'
+  [svc001]='([name]="ServiceNet 1"   [cidr]="10.176.0.0/13"  )'
+  [svc002]='([name]="ServiceNet 2"   [cidr]="10.184.0.0/13"  )'
+  [svc003]='([name]="ServiceNet 3"   [cidr]="10.208.0.0/12"  )'
 )
 
 for rt in "${!routes[@]}"; do
   #echo "ref  = ${rt}"
   declare -A "${rt}AA=${routes[$rt]}"
-  for key in name ip mask; do
+  for key in name cidr; do
     eval ${key}'=${'${rt}'AA['$key']}'
   done
+  suffix="${cidr#*/}"
+  mask=`cidr2mask $suffix`
   if [ $_delete -eq 0 ]; then
     routeadd "$ip" "$mask" "$name"
   else
