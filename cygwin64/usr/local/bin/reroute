@@ -73,13 +73,14 @@ routeremove()
 #  [svc002]='([name]="ServiceNet 2"   [ip]="10.208.0.0"   [mask]="255.240.0.0")'
 #)
 declare -A routes=(
-  [inside]='([name]="Inside Segment" [cidr]="172.20.100.0/24")'
-  [bal001]='([name]="Balancer"       [cidr]="172.20.119.0/32")'
-  [dmz001]='([name]="DMZ Web"        [cidr]="172.20.120.0/22")'
-  [dmz002]='([name]="DMZ FTP"        [cidr]="172.20.124.0/22")'
-  [svc001]='([name]="ServiceNet 1"   [cidr]="10.176.0.0/13"  )'
-  [svc002]='([name]="ServiceNet 2"   [cidr]="10.184.0.0/13"  )'
-  [svc003]='([name]="ServiceNet 3"   [cidr]="10.208.0.0/12"  )'
+  [inside]='([name]="Inside Segment" [cidr]="172.20.100.0/24" )'
+  [bal001]='([name]="Balancer"       [cidr]="172.20.119.0/24" )'
+  [dmz001]='([name]="DMZ Web"        [cidr]="172.20.120.0/22" )'
+  [dmz002]='([name]="DMZ FTP"        [cidr]="172.20.124.0/22" )'
+  [svc001]='([name]="ServiceNet 1"   [cidr]="10.176.0.0/13"   )'
+  [svc002]='([name]="ServiceNet 2"   [cidr]="10.184.0.0/13"   )'
+  [svc003]='([name]="ServiceNet 3"   [cidr]="10.208.0.0/12"   )'
+  [clxbe1]='([name]="Clustrix BE 1"  [cidr]="10.242.73.192/26")'
 )
 
 for rt in "${!routes[@]}"; do
