@@ -1,4 +1,3 @@
-#!/bin/bash
 service() {
   local svc="$1"
   local action="$2"

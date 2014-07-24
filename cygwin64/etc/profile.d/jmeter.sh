@@ -1,4 +1,3 @@
-#!/bin/bash
 
 export JMETER_HOME="${JMETER_HOME:-/C/jmeter}"
 

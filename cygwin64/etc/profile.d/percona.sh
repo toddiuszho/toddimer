@@ -1,4 +1,3 @@
-#!/bin/bash
 
 #
 # percona.sh: functions wrapped around Percona toolkit

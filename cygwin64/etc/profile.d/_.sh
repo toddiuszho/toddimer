@@ -1,4 +1,3 @@
-#!/bin/sh
 
 #
 # _.sh: Directory and path aliases and functions

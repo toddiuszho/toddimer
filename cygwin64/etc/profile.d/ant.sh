@@ -1,4 +1,3 @@
-#!/bin/bash
 
 export ANT_HOME=${ANT_HOME:-"/opt/ant/default"}
 pathadd "$ANT_HOME/bin" "Ant"

@@ -1,4 +1,3 @@
-#!/bin/bash
 
 _chef_ruby="/cygdrive/c/opscode/chef/embedded/bin/ruby"
 _chef_bin_dir_win="C:/opscode/chef/bin"

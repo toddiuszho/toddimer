@@ -1,4 +1,3 @@
-#!/bin/bash
 function toggle-proxy()
 {
   capture=$(/C/tools/toggle-proxy.cmd $@)

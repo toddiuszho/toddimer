@@ -1,4 +1,3 @@
-#!/bin/bash
 
 source /usr/local/lib/imports.sh
 lib_imports table fileutil

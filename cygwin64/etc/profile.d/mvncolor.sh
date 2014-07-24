@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 export MAVEN_OPTS='-DsocksProxyHost=127.0.0.1 -DsocksProxyPort=12345'
  

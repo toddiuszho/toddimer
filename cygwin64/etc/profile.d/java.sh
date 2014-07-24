@@ -1,4 +1,3 @@
-#!/bin/bash
 
 #
 # java.sh: java aliases and functions
@@ -10,4 +9,5 @@ if [ "Cygwin" = `uname -o` ]; then
 fi
 
 pathadd -f -s "$JAVA_HOME/bin" "Java binaries"
+pathadd -f -s "/bin" "Heimdal"
 
