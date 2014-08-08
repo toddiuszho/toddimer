@@ -1,6 +1,9 @@
+#
 # Exit if not interactive
+#
 [[ "$-" != *i* ]] && return
 
+#
 # Shell Options
 #
 # Make bash append rather than overwrite the history on disk
@@ -10,6 +13,7 @@ shopt -s histappend
 # for example, cd /vr/lgo/apaache would find /var/log/apache
 shopt -s cdspell
 
+#
 # Completion options
 #
 # Define to avoid stripping description in --option=description of './configure --help'
@@ -25,7 +29,6 @@ COMP_TAR_INTERNAL_PATHS=1
 #
 # Aliases
 #
-# Some people use a different file for aliases
 if [ -f "${HOME}/.bash_aliases" ]; then
   source "${HOME}/.bash_aliases"
 fi
@@ -44,13 +47,13 @@ alias copy='cp'
 # umask 027
 # Paranoid: neither group nor others have any perms:
 # umask 077
+#
 umask 003
 
 
 #
 # Functions
 #
-# Some people use a different file for functions
 if [ -f "${HOME}/.bash_functions" ]; then
   source "${HOME}/.bash_functions"
 fi
@@ -107,29 +110,25 @@ lbstats()
 }
 
 
+#
 # Customization
-# -------------
-
-
+#
 # Perforce
 export P4USER=ttrimmer
 export P4CLIENT=TTRIMMER002
 export P4EDITOR='C:\cygwin64\bin\vim.exe'
-
-
+#
 # Normalization
 alias vi='/usr/bin/vim'
 export userprofile=`cygpath -au "$USERPROFILE"`
-
-
+#
 # Terminal
 if [[ $TERM == xterm* ]]; then
   title='Zydeco'
   PS1+="\[\e]0;$title\007\]"
 fi
 eval `dircolors -b /etc/DIR_COLORS`
-
-
+#
 # Networking
 alias home-james='toggle-proxy off; closesesame'
 alias work-work='toggle-proxy on; opensesame'
@@ -141,25 +140,23 @@ alias cb-p='net stop "Computer Browser"'
 alias cb-t='net start "Computer Browser"'
 alias hailmary='cb-r; illithid; juxtapose'
 alias ifconfig='ipconfig'
-
-
+#
 # JBoss
 export TWIDDLE_HOME=/opt/twiddle
-
-
+#
 # Rackspace
 . /etc/group.d/adm/raxmon.sh
-
-
+#
 # Ruby
 PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
-
-
+#
 # XML
 alias saxon="~/depot/enterprise/commons/xml/saxon.sh"
 
 
+#
 # Tunneling
+#
 _tunnel-up() {
   nohup tunnel -u ttrimmer -h svc1 -i svc1 -b TTRIMMER002 -l $2 -r $2 -t $1 &
 }
