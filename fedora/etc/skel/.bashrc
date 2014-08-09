@@ -1,24 +1,17 @@
-# User dependent .bash_profile file
+# .bashrc
 
-# source the users bashrc if it exists
-if [ -f "${HOME}/.bashrc" ] ; then
-  source "${HOME}/.bashrc"
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
 fi
 
-# Set PATH so it includes user's private bin if it exists
-if [ -d "${HOME}/bin" ] ; then
-  PATH="${HOME}/bin:${PATH}"
-fi
-
-export PATH
-
-# Set MANPATH so it includes users' private man if it exists
-if [ -d "${HOME}/man" ]; then
-  MANPATH="${HOME}/man:${MANPATH}"
-fi
-
-# Set INFOPATH so it includes users' private info if it exists
-if [ -d "${HOME}/info" ]; then
-  INFOPATH="${HOME}/info:${INFOPATH}"
-fi
+#
+# Uncomment lines below for auto-tmux support
+#export LC_TMUX_SESSION_NAME="${USER}"
+#if [ -n "$LC_TMUX_SESSION_NAME" -a $TERM != "screen" ]; then
+#  DOMAINLESS="${HOSTNAME%%.*}"
+#  IDLESS="${DOMAINLESS#[0-9][0-9][0-9][0-9][0-9][0-9]-}"
+#  echo -ne "\033]0;"${IDLESS}"\007"  # Set terminal title
+#  tmux has-session -t "${LC_TMUX_SESSION_NAME}" > /dev/null 2>&1 && tmux attach-session -t "${LC_TMUX_SESSION_NAME}" || tmux new-session -s "${LC_TMUX_SESSION_NAME}"
+#fi
 
