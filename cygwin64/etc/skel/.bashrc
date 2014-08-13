@@ -8,7 +8,8 @@ fi
 #
 # Uncomment lines below for auto-tmux support
 #export LC_TMUX_SESSION_NAME="${USER}"
-#if [ -n "$LC_TMUX_SESSION_NAME" -a $TERM != "screen" ]; then
+#declare -i doTmux=0
+#if [ -n "$LC_TMUX_SESSION_NAME" -a $TERM != "screen" -a $doTmux -eq 0 ]; then
 #  DOMAINLESS="${HOSTNAME%%.*}"
 #  IDLESS="${DOMAINLESS#[0-9][0-9][0-9][0-9][0-9][0-9]-}"
 #  echo -ne "\033]0;"${IDLESS}"\007"  # Set terminal title
