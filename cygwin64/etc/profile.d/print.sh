@@ -42,3 +42,11 @@ function printwarning()
   echo -e "[\e[1;33m$banner\e[00m] $@" >&2
 }
 
+printlabel() {
+  if [ $# -gt 1 ]; then
+    echo -e $1 "\e[35m$2:\e[0m"
+  else
+    echo -e "\e[35m$1:\e[0m"
+  fi
+}
+
