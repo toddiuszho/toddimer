@@ -81,6 +81,7 @@ declare -A routes=(
   [svc002]='([name]="ServiceNet 2"   [cidr]="10.184.0.0/13"   )'
   [svc003]='([name]="ServiceNet 3"   [cidr]="10.208.0.0/12"   )'
   [clxbe1]='([name]="Clustrix BE 1"  [cidr]="10.242.73.192/26")'
+  [cld001]='([name]="CLD"            [cidr]="10.12.0.0/16"    )'
 )
 
 for rt in "${!routes[@]}"; do
