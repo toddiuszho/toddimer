@@ -22,7 +22,7 @@ usage()
   echo "  -l LOG    Log output from route commands to file LOG" >&2
 }
 
-_log=/dev/null
+_log=/tmp/reroute
 declare -i _delete=1
 while getopts "dhl:" opt; do
   case $opt in
@@ -82,6 +82,9 @@ declare -A routes=(
   [svc003]='([name]="ServiceNet 3"   [cidr]="10.208.0.0/12"   )'
   [clxbe1]='([name]="Clustrix BE 1"  [cidr]="10.242.73.192/26")'
   [cld001]='([name]="CLD"            [cidr]="10.12.0.0/16"    )'
+  [ordnet]='([name]="ORD Net Gear"   [cidr]="172.29.0.0/22"   )'
+  [ordcln]='([name]="ORD Clinical"   [cidr]="172.31.0.0/22"   )'
+  [ordsoc]='([name]="ORD Social"     [cidr]="172.30.0.0/22"   )'
 )
 
 for rt in "${!routes[@]}"; do
