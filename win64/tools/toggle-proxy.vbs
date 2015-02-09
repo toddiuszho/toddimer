@@ -13,7 +13,7 @@ Const sProxyServer   = "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet 
 Const sLocal = "<local>"
 Const sSocks="socks=127.0.0.1:12345"
 Dim aOverrides, sOverrides 
-aOverrides = array("dev.viverae.com", "184.73.235.12", "107.22.210.163", "184.73.255.87", "204.236.224.158", "23.21.122.20", "23.23.126.165", "54.243.248.138", "23.21.62.199", sLocal)
+aOverrides = array("corp.viverae.com", "helpdesk", "172.20.119.210", "dev.viverae.com", "viveraeconnect.com", "184.73.235.12", "107.22.210.163", "184.73.255.87", "204.236.224.158", "23.21.122.20", "23.23.126.165", "54.243.248.138", "23.21.62.199", sLocal)
 sOverrides = Join(aOverrides, ";")
 
 'Display current setting
