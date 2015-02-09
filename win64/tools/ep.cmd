@@ -1,0 +1,1 @@
+C:\EditPad\EditPadPro.exe %* 
