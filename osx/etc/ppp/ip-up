@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#
+# Template /etc/ppp/ip-up
+#
+# !!! Replace INTERNAL_IP_X, SUFFIX_X, CIDR_X !!!
+#
+
+# DNS
+cat > /etc/resolv.conf <<EOH
+nameserver ${INTERNAL_IP_1}
+nameserver ${INTERNAL_IP_2}
+nameserver 8.8.4.4
+search ${SUFFIX_1} ${SUFFIX_2} ${SUFFIX_3}
+EOH
+
+#Routing
+declare -a nets=(
+  "${CIDR_1}"
+  "${CIDR_2}
+)
+
+for nz in "${nets[@]}"; do
+  /sbin/route add -net "$nz" -interface ppp0
+done
+
