@@ -4,7 +4,7 @@ mkdir toddiuszho
 cd toddiuszho
 git clone https://github.com/toddiuszho/toddimer.git
 cd toddimer/fedora/home/ttrimmer
-for fz in .*; do install -m 600 $fz ./; done
+for fz in .*; do install -m 600 $fz ~/; done
 ! [ -e ~/bin ] && mkdir ~/bin
 cd bin
 for fz in *; do install -m 700 $fz ~/bin; done
