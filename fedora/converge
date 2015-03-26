@@ -1,0 +1,14 @@
+#!/bin/bash
+cd ~
+mkdir toddiuszho
+cd toddiuszho
+git clone https://github.com/toddiuszho/toddimer.git
+cd toddimer/fedora/home/ttrimmer
+for fz in .*; do install -m 600 $fz ./; done
+mkdir bin
+cd bin
+for fz in *; do install -m 700 $fz ./; done
+cd ../../../usr/local/bin
+sudo install -o root -g adm -m 755 * /usr/local/bin
+cd ../lib
+sudo install -o root -g adm -m 755 * /usr/local/lib
