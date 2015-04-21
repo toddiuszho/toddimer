@@ -1,0 +1,8 @@
+#!/bin/bash
+PIDFILE=/opt/run/opensesame.pid
+[ -e "$PIDFILE" ] && cat "$PIDFILE" | xargs kill
+for fz in /opt/run/reaper/*.pid; do
+  cat "$fz" | xargs kill
+  \rm $fz
+done
+
