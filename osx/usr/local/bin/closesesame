@@ -1,8 +1,20 @@
 #!/bin/bash
 PIDFILE=/opt/run/opensesame.pid
-[ -e "$PIDFILE" ] && cat "$PIDFILE" | xargs kill
+[ `id -u` != 0 ] && echo "Must be root!" >&2 && exit 1
+[ -e "$PIDFILE" ] && {
+  cat "$PIDFILE" | xargs ps -p 2>&1 > /dev/null
+  [ $? -eq 0 ] && cat "$PIDFILE" | xargs kill
+  \rm "$PIDFILE"
+}
 for fz in /opt/run/reaper/*.pid; do
-  cat "$fz" | xargs kill
-  \rm $fz
+  [ -e "$fz" ] && {
+    cat "$fz" | xargs ps -p 2>&1 > /dev/null
+    [ $? -eq 0 ] && cat "$fz" | xargs kill
+    \rm "$fz"
+  }
+done
+declare -a aDevz=("Thunderbolt Ethernet" "Wi-Fi")
+for devz in "${aDevz[@]}"; do
+  networksetup -setsocksfirewallproxystate "$devz" off
 done
 

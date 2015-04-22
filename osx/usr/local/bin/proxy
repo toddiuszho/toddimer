@@ -1,11 +1,18 @@
 #!/bin/bash
 declare -i _n=0
 echo $$ > /opt/run/opensesame.pid
-until reaper ssh -D 12345 -N -c arcfour web5 > /dev/null 2>&1; do
+declare -a aDevz=("Thunderbolt Ethernet" "Wi-Fi")
+for devz in "${aDevz[@]}"; do
+  networksetup -setsocksfirewallproxy "${devz}" localhost 12345 
+done
+until reaper ssh -D 12345 -N -c arcfour -i ~Todd.Trimmer/.ssh/ttrimmer-web5.pri ttrimmer@web5 > /dev/null 2>&1; do
   if [ $_n -eq 60 ]; then
     exit
   fi
   _n=$(( $_n + 1 ))
   sleep 2
+done
+for devz2 in "${aDevz[@]}"; do
+  networksetup -setsocksfirewallproxystate "$devz2" off 
 done
 
