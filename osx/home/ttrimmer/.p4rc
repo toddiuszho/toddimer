@@ -1,0 +1,4 @@
+export P4USER=ttrimmer
+export P4CLIENT=ttrimmer-Trimac
+export P4PORT=vscm01:1666
+export P4EDITOR=/usr/bin/vim
