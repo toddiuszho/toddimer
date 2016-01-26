@@ -1,0 +1,126 @@
+'scopeName': 'source.irule'
+'fileTypes': [
+  'tcl'
+  'irule'
+]
+'foldingStartMarker': '^\\s*(when)'
+'foldingStopMarker': '^\\s*}$'
+'name': 'F5 Networks iRules'
+'patterns': [
+  {
+    'include': '#hash'
+  }
+  {
+    'include': '#event'
+  }
+  {
+    'include': '#log'
+  }
+  {
+    'include': '#set_variables'
+  }
+  {
+    'include': '#set_global_variables'
+  }
+  {
+    'include': '#keywords'
+  }
+  {
+    'include': '#command_options'
+  }
+  {
+    'include': '#use_global_variables'
+  }
+  {
+    'include': '#use_variables'
+  }
+  {
+    'include': '#commands'
+  }
+  {
+    'include': '#ipv4_address'
+  }
+  {
+    'include': '#ipv6_address'
+  }
+  {
+    'include': '#subnet'
+  }
+  {
+    'include': 'numerals'
+  }
+]
+'repository':
+  'hash':
+    'match': '#.*$'
+    'name': 'comment.line.f5networks'
+  'event':
+    'patterns': [
+      {
+        'begin': '^\\s*(when)\\b'
+        'beginCaptures':
+          '1':
+            'name': 'constant.character.f5networks'
+        'end': '{'
+        'patterns': [
+          {
+            'match': '\\b([A-Z0-9_]+)\\b'
+            'name': 'entity.character.f5networks'
+          }
+        ]
+      }
+    ]
+  'log':
+    'match': '^\\s*(log)\\s+([a-zA-Z0-9]+)\\.([a-zA-Z0-9]+)'
+    'captures':
+      '1':
+        'name': 'keyword.other.f5networks'
+      '2':
+        'name': 'string.other.f5networks'
+      '3':
+        'name': 'string.other.f5networks'
+  'keywords':
+    'match': '\\b(switch|default|when|if|else|for|foreach|while|proc|eval|expr|lappend|lindex|class|match|pool)\\b'
+    'name': 'keyword.other.f5networks'
+  'command_options':
+    'match': '\\s(\\-[a-zA-Z0-9_]+)\\s'
+    'name': 'string.regexp.f5networks'
+  'set_variables':
+    'match': '\\s+(set|append)\\s([a-zA-Z0-9\\-_]+)'
+    'captures':
+      '1':
+        'name': 'keyword.other.f5networks'
+      '2':
+        'name': 'string.other.f5networks'
+  'use_variables':
+    'match': '(\\${?[a-zA-Z0-9\\-_]+}?)'
+    'name': 'string.other.f5networks'
+  'set_global_variables':
+    'match': '\\s+(set|append)\\s([a-zA-Z0-9\\-_\\:]+)'
+    'captures':
+      '1':
+        'name': 'keyword.other.f5networks'
+      '2':
+        'name': 'string.regexp.f5networks'
+  'use_global_variables':
+    'match': '(\\${?[a-zA-Z0-9\\-_]*\\:\\:[a-zA-Z0-9\\-_\\:]+}?)'
+    'name': 'string.regexp.f5networks'
+  'commands':
+    'match': '(\\[?[A-Z]+\\:\\:[a-z0-9_\\s]+\\]?)'
+    'name': 'constant.character.f5networks'
+  'ipv4_address':
+    'match': '\\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b'
+    'name': 'constant.numeric.f5networks'
+  'ipv6_address':
+    'match': '\\b([0-9a-fA-F]{0,4}|0)(\:([0-9a-fA-F]{0,4}|0)){1,7}\\b'
+    'name': 'constant.numeric.f5networks'
+  'subnet':
+    'match': '(\\s(255|0)\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|/\\d{1,2})'
+    'name': 'string.regexp.f5networks'
+  'numerals':
+    'patterns': [
+      {
+        'match': '\\b([0-9]+)\\b'
+        'name': 'constant.numeric.f5networks'
+      }
+    ]
