@@ -1,13 +1,14 @@
-alias d='ls -FlaGh'
-alias dg='ls -Fla'
-alias dn='ls -Flan'
+alias d='gls -FlaGh --color=yes'
+alias dg='gls -Fla --color=yes'
+alias dn='gls -Flan --color=yes'
 
 alias git=hub
 
 # Prompt and Title
 case $TERM in
   xterm*)
-    PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}\007"';
+    #PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}\007"';
+    PROMPT_COMMAND='echo -ne "\033]0;$(basename $(pwd))\007"';
     PS1='[\[\e[35m\]\t \[\e[36m\]\h \[\e[33m\]\W\[\e[0m\]]\$ ';;
     #PS1="\[\033]0;\u@\h: \w\007\]bash\\$ ";;
   *)
