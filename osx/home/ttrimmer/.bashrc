@@ -34,7 +34,7 @@ export JAVA_HOME=/usr/java/default
 #alias ant='ant -logger org.apache.tools.ant.listener.AnsiColorLogger'
 
 # JBoss
-export JBOSS_HOME=/opt/jboss/jboss7
+export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
 
 # Terraform
 #PATH="$PATH:/opt/terraform/default"
@@ -42,6 +42,8 @@ export JBOSS_HOME=/opt/jboss/jboss7
 # Dupes
 alias grep='/usr/local/bin/ggrep'
 alias find='/usr/local/bin/gfind'
+
+alias rcat="ggrep -Pv '^($|#)'"
 
 kitchen() {
   if [ "provision" = "$1" ]; then
@@ -64,6 +66,8 @@ alias md5sum='md5'
 alias sha256sum='shasum -a 256'
 
 alias sha512sum='shasum -a 512'
+
+alias myprivateipv4="ifconfig | grep -Po '(?<=inet\s)[\d\.]+' | grep -v '127.0.0.1'"
 
 export RVT='rack.viverae.technology'
 
