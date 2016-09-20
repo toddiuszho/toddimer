@@ -1,0 +1,4 @@
+#!/bin/bash
+unset LC_TMUX_SESSION_NAME
+/usr/bin/scp "$@"
+

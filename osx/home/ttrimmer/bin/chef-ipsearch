@@ -1,0 +1,2 @@
+#!/bin/bash
+knife search node "$@" -a ipaddress -Fj | jq -Mr '.rows[] | to_entries[] | (.key | sub("\\..+"; "")) as $idless | @text "\"\(.value.ipaddress)\": \"\($idless)\""'

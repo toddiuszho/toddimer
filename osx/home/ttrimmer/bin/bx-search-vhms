@@ -1,0 +1,2 @@
+#!/bin/bash
+knife search node 'tags:vhms-release' -i 2>/dev/null | sort

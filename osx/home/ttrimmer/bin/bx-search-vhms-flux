@@ -1,0 +1,2 @@
+#!/bin/bash
+knife search node '(role:viverae_vhms_demo OR role:viverae_vhms_etl_prod) AND NOT tags:perf' -i 2>/dev/null | sort

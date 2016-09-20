@@ -1,0 +1,23 @@
+#!/bin/bash
+declare -a opts=("-e")
+while getopts "n" opt; do
+  case "$opt" in
+    n) opts+=("-n")
+  esac
+done
+shift $(( $OPTIND - 1 ))
+OPTIND=0
+
+nodename="$1"
+domainless="${nodename%%.*}"
+idless="${domainless#[0-9][0-9][0-9][0-9][0-9][0-9]-}"
+justified=$(printf "%-30s" "${idless}:")
+
+debugit() {
+  echo "nn=[$nodename]"
+  echo "dl=[$domainless]"
+  echo "il=[$idless]"
+  echo "jf=[$justified]"
+}
+
+echo ${opts[@]} "\033[35m${justified}\033[0m"

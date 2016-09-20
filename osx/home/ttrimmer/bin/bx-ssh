@@ -1,0 +1,4 @@
+#!/bin/bash
+bx="$1"
+shift 1
+ssh -qt "$bx" ". /etc/profile; $@"
