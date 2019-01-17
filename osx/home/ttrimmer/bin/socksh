@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -o ProxyCommand='nc -x localhost:12345 %h %p' "$@"

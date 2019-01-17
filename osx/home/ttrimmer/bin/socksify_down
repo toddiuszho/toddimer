@@ -1,0 +1,24 @@
+#!/bin/bash
+pid=$(lsof -Pni :12345 | ggrep LISTEN | ggrep -P '127\.0\.0\.1' | awk '{ print $2 }')
+declare -i rez=0
+if [ -n "${pid}" ]; then
+  ppid=$(ps -p $pid -o ppid | tail -n +2)
+  if [ "${ppid}" = 1 ]; then
+    echo "Killing $pid"
+    kill -TERM $pid
+    rez=$?
+  else
+    echo "Killing $pid and parent $ppid"
+    kill -TERM $ppid $pid
+    rez=$?
+  fi 
+
+  if [ $rez -eq 0 ]; then
+    echo -e "[\033[32mSUCCESS\033[0m] Done"
+  else
+    echo -e "[\033[31mFAIL\033[0m] Couldn't find parent process to SIGTERM to"
+  fi
+else
+  echo -e "[\033[33mWARN\033[0m] Nothing to kill"
+fi
+

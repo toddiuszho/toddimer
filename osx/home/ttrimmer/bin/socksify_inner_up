@@ -1,0 +1,10 @@
+#!/bin/bash
+set -m
+
+declare -i circuit_breaker=500
+remote_host='example.com'
+
+for i in $(seq 1 ${circuit_breaker}); do
+  ssh -N -D localhost:12345 "${remote_host}"
+done
+
