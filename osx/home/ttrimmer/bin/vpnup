@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 ## Config
-DOMAIN=${DOMAIN:-example.com}
-SERVICE=${SERVICE-MyCorporateVPN}
+DOMAIN="${DOMAIN:-example.com}"
+SERVICE="${SERVICE-MyCorporateVPN}"
 
 ## Input
 echo -n "Okta: "
