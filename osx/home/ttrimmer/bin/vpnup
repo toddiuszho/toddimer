@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+## Config
+DOMAIN=${DOMAIN:-example.com}
+SERVICE=${SERVICE-MyCorporateVPN}
+
+## Input
+echo -n "Okta: "
+read okta_code
+
+## Preserve clipboard
+old="$(pbpaste)"
+
+
+## Retrieve password to clipboard
+pass="$(security find-internet-password -a "${USER}" -s "${DOMAIN}" -w)"
+
+if [ $? -ne 0 ] || [ -z "${pass}" ]; then
+  echo 'Put your Okta password in your keychain with:' >&2
+  echo '' >&2
+  echo "  security add-internet-password -a \"\${USER}\" -s \"${DOMAIN}\" -w \"YourPassword\"" >&2
+  echo '' >&2
+  echo "${old}" | pbcopy
+  exit 1
+fi
+
+full="${pass},${okta_code}"
+echo -n "${full}" | pbcopy
+
+## Connect
+okta_user=$(echo "${USER}" | tr A-Z a-z)
+nwrk="${SERVICE}"
+# scutil --nc start "${nwrk}"
+
+## Handle prompt
+handle_prompt() {
+  okta_user="${okta_user}" nwrk="${nwrk}" osascript <<EOF
+set okta_user to system attribute "okta_user"
+set nwrk to system attribute "nwrk"
+
+tell application "System Events"
+	tell current location of network preferences
+    set svc to service nwrk
+    connect svc
+    delay 2
+
+    tell application id "com.apple.systemevents"
+      -- type Okta username
+      keystroke okta_user
+      delay 1
+  
+      -- advance to next inputbox
+      keystroke tab
+  
+      -- paste clipboard contents into password box
+      keystroke "v" using {command down}
+      delay 1
+  
+      -- press "Enter"
+      keystroke (key code 36)
+    end tell
+  end tell
+end tell
+EOF
+}
+
+handle_prompt
+
+
+## Restore clipboard
+echo "${old}" | pbcopy
