@@ -2,44 +2,62 @@
 
 ## Config
 DOMAIN="${DOMAIN:-example.com}"
-SERVICE="${SERVICE-MyCorporateVPN}"
+SERVICE="${SERVICE-Example Corporate VPN}"
+
+
+## Derived
+okta_user=$(echo "${USER}" | tr A-Z a-z)
+service_key=$(echo "${SERVICE}" | tr "A-Z " "a-z.")
+
 
 ## Input
 echo -n "Okta: "
 read okta_code
 
-## Preserve clipboard
-old="$(pbpaste)"
+
+## Keychain passwords
+get-keychain-password() {
+  label="$1"
+  key="$2"
+  [ -z "${label}" ] && return 1
+  [ -z "${key}" ] && return 1
+  lpass="$(security find-internet-password -a "${USER}" -s "${key}" -w )"
+  if [ $? -ne 0 ] || [ -z "${lpass}" ]; then
+    echo "Put your "${label}" password in your keychain with:" >&2
+    echo '' >&2
+    echo "  security add-internet-password -a \"\${USER}\" -s \"${key}\" -w \"YourPassword\"" >&2
+    echo '' >&2
+    return 1
+  fi
+  echo "${lpass}"
+}
+
+shared="$(get-keychain-password "VPN" "${service_key}")"
+[ $? -ne 0 ] && exit 1
+pass="$(get-keychain-password "Okta" "${DOMAIN}")"
+[ $? -ne 0 ] && exit 1
 
 
-## Retrieve password to clipboard
-pass="$(security find-internet-password -a "${USER}" -s "${DOMAIN}" -w)"
-
-if [ $? -ne 0 ] || [ -z "${pass}" ]; then
-  echo 'Put your Okta password in your keychain with:' >&2
-  echo '' >&2
-  echo "  security add-internet-password -a \"\${USER}\" -s \"${DOMAIN}\" -w \"YourPassword\"" >&2
-  echo '' >&2
-  echo "${old}" | pbcopy
-  exit 1
-fi
-
+## Full Okta password to clipboard
 full="${pass},${okta_code}"
+old="$(pbpaste)"
 echo -n "${full}" | pbcopy
 
-## Connect
-okta_user=$(echo "${USER}" | tr A-Z a-z)
-nwrk="${SERVICE}"
-# scutil --nc start "${nwrk}"
 
-## Handle prompt
+## CLI automation
+cli_it() {
+  scutil --nc start "${SERVICE}" --secret "${shared}" --user "${okta_user}" --password "${full}"
+}
+
+
+## GUI Automation
 handle_prompt() {
   okta_user="${okta_user}" nwrk="${nwrk}" osascript <<EOF
 set okta_user to system attribute "okta_user"
-set nwrk to system attribute "nwrk"
+set nwrk to system attribute "SERVICE"
 
 tell application "System Events"
-	tell current location of network preferences
+        tell current location of network preferences
     set svc to service nwrk
     connect svc
     delay 2
@@ -48,14 +66,14 @@ tell application "System Events"
       -- type Okta username
       keystroke okta_user
       delay 1
-  
+
       -- advance to next inputbox
       keystroke tab
-  
+
       -- paste clipboard contents into password box
       keystroke "v" using {command down}
       delay 1
-  
+
       -- press "Enter"
       keystroke (key code 36)
     end tell
@@ -64,7 +82,10 @@ end tell
 EOF
 }
 
-handle_prompt
+
+## Main
+cli_it
+#handle_prompt
 
 
 ## Restore clipboard
