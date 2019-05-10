@@ -68,7 +68,7 @@ set okta_user to system attribute "okta_user"
 set nwrk to system attribute "SERVICE"
 
 tell application "System Events"
-	tell current location of network preferences
+        tell current location of network preferences
     set svc to service nwrk
     connect svc
     delay 2
@@ -77,14 +77,14 @@ tell application "System Events"
       -- type Okta username
       keystroke okta_user
       delay 1
-  
+
       -- advance to next inputbox
       keystroke tab
-  
+
       -- paste clipboard contents into password box
       keystroke "v" using {command down}
       delay 1
-  
+
       -- press "Enter"
       keystroke (key code 36)
     end tell
