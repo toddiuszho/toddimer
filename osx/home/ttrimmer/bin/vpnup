@@ -40,8 +40,8 @@ pass="$(get-keychain-password "Okta" "${DOMAIN}")"
 
 ## Full Okta password to clipboard
 full="${pass},${okta_code}"
-old="$(pbpaste)"
-echo -n "${full}" | pbcopy
+#old="$(pbpaste)"
+#echo -n "${full}" | pbcopy
 
 
 ## CLI automation
@@ -100,5 +100,5 @@ cli_it
 
 
 ## Restore clipboard
-echo "${old}" | pbcopy
+#echo "${old}" | pbcopy
 
