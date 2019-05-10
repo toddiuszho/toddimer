@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Config
+SERVICE="${SERVICE-NA Engineering VPN}"
+VPN_IFACE="${VPN_IFACE:-ppp0}"
+VERB="${VERB:-add}"
+
+# Derived
+service_key=$(echo "${SERVICE}" | tr "A-Z " "a-z.")
+
+# Exec
+while read block; do
+  if [ -n "${block}" ]; then
+    sudo route -n "${VERB}" "${block}" -interface "${VPN_IFACE}"
+  fi
+done < <(cat "${HOME}/.vpn/${service_key}")
+
