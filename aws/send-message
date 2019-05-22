@@ -1,0 +1,8 @@
+#!/bin/bash
+. ./env.sh
+aws --profile "${AWS_PROFILE}" sqs send-message \
+  --queue-url "${SQS_URL}" \
+  --message-group-id="${GROUP_ID}" \
+  --message-deduplication-id="${DEDUPE_ID}" \
+  --message-body file://payload.json
+
