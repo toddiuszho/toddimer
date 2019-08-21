@@ -1,4 +1,5 @@
-# Set visibility timeout for all queues in AWS Profile whose URL matches the needle
+#
+# Set visibility timeout for all queues in AWS Profile whose URL matches the needle.
 #
 # Requirements:
 #   aws CLI
