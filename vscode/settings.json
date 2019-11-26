@@ -1,0 +1,22 @@
+{
+    "telemetry.enableTelemetry": false,
+    "workbench.statusBar.feedback.visible": false,
+    "files.associations": {
+        "*.template": "jinja-yaml"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "java.configuration.checkProjectSettingsExclusions": false,
+    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"/Users/todd.trimmer/.vscode/extensions/gabrielbb.vscode-lombok-0.9.9/server/lombok.jar\"",
+    "editor.tabSize": 2,
+    "[ruby]": {},
+    "window.zoomLevel": 0,
+    "editor.minimap.scale": 2,
+    "editor.renderWhitespace": "selection",
+    "debug.showBreakpointsInOverviewRuler": true,
+    "workbench.colorCustomizations": {
+        "window.activeBorder": "#070",
+        "activityBar.activeBorder": "#69ffff",
+        "activityBar.activeBackground": "#555"
+    }
+}
