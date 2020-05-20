@@ -1,0 +1,7 @@
+---
+paladin:
+  retribution:
+    on-retribution:
+      chats:
+        - Thank you for dying to give me {rt1} %n {rt1} buff! Please die again soon! {rt8} {rt8} {rt8}
+        - {rt8} It's Muffin Time {rt8}
