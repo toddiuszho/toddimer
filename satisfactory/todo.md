@@ -7,8 +7,8 @@ TODO
 5. Incoming to Homefry should not go all the way down to train station. Bring to upper
 6. Dune Desert geysers get on grid
 7. Incoming Caterium Ore to Homefry:
-   7.1. 8 smelters -> 8 constructors -> Quickwire coalesce
-   7.2. 1 smelter -> 1 constructor -> Wire
+   * 8 smelters -> 8 constructors -> Quickwire coalesce
+   * 1 smelter -> 1 constructor -> Wire
 8. Second Manuf for Turbo Motors to sink
 
 Alt Recipes To Fish For
