@@ -14,7 +14,4 @@ TODO
 Alt Recipes To Fish For
 -----------------------
 1. Diluted Packaged Fuel
-2. Fused Quickwire
-3. Turbo Rigour Motor
-4. Turbo Heavu Fuel
-5. Plastic Smart Plating
+2. Plastic Smart Plating
