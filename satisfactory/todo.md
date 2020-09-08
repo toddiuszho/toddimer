@@ -6,10 +6,6 @@ TODO
 4. Fabric on Petro's Coke belt
 5. Incoming to Homefry should not go all the way down to train station. Bring to upper
 6. Dune Desert geysers get on grid
-7. Incoming Caterium Ore to Homefry:
-   * 8 smelters -> 8 constructors -> Quickwire coalesce
-   * 1 smelter -> 1 constructor -> Wire
-8. Second Manuf for Turbo Motors to sink
 
 Alt Recipes To Fish For
 -----------------------
