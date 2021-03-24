@@ -1,0 +1,18 @@
+credential.helper=osxkeychain
+user.name=Todd Trimmer
+user.email=todd.trimmer@gmail.com
+alias.logline=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+alias.co=checkout
+tag.sort=version:refname
+core.pager=diff-so-fancy | less --tabs=4 -RFX
+color.diff-highlight.oldnormal=red bold
+color.diff-highlight.oldhighlight=red bold 52
+color.diff-highlight.newnormal=green bold
+color.diff-highlight.newhighlight=green bold 22
+color.diff.meta=11
+color.diff.frag=magenta bold
+color.diff.commit=yellow bold
+color.diff.old=red bold
+color.diff.new=green bold
+color.diff.whitespace=red reverse
+pull.rebase=false
