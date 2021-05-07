@@ -5,6 +5,7 @@ alias.logline=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %
 alias.co=checkout
 tag.sort=version:refname
 core.pager=diff-so-fancy | less --tabs=4 -RFX
+core.excludesfile = ~/.gitignore_global
 color.diff-highlight.oldnormal=red bold
 color.diff-highlight.oldhighlight=red bold 52
 color.diff-highlight.newnormal=green bold
