@@ -1,0 +1,22 @@
+{
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.tabSize": 2,
+    "editor.unfoldOnClickAfterEndOfLine": true,
+    "editor.detectIndentation": false,
+    "window.zoomLevel": 3,
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.external.linuxExec": "iTerm.app",
+    "terminal.integrated.profiles.osx": {
+      "bash5": {
+        "path": "/usr/local/bin/bash",
+        "icon": "pencil",
+        "args": ["-l"]
+      }
+    },
+    "terminal.integrated.defaultProfile.osx": "bash5"
+}
