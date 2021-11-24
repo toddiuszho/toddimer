@@ -9,14 +9,72 @@
     "security.workspace.trust.untrustedFiles": "open",
     "editor.minimap.enabled": false,
     "editor.renderWhitespace": "none",
+    "editor.tokenColorCustomizations": {
+      "[Default Dark+]": {
+        "textMateRules": [
+          {
+            "scope": "keyword.control",
+            "settings": {
+              "foreground": "#aaf7d3"
+            }
+          },
+          {
+            "scope": "meta.block",
+            "settings": {
+              "foreground": "#d96efa"
+            }
+          },
+          {
+            "scope": "keyword.operator",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          },
+          {
+            "scope": "punctuation.separator",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          },
+          {
+            "scope": "meta.brace",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          },
+          {
+            "scope": "constant.numeric",
+            "settings": {
+              "foreground": "#f5562f"
+            }
+          }
+        ]
+      }
+    },
     "terminal.external.osxExec": "iTerm.app",
     "terminal.external.linuxExec": "iTerm.app",
     "terminal.integrated.profiles.osx": {
       "bash5": {
         "path": "/usr/local/bin/bash",
-        "icon": "pencil",
+        "icon": "terminal-bash",
         "args": ["-l"]
       }
     },
-    "terminal.integrated.defaultProfile.osx": "bash5"
+    "terminal.integrated.defaultProfile.osx": "bash5",
+    "cSpell.userWords": [
+      "cnect"
+    ],
+    "cSpell.enabled": false,
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#002000",
+      "activityBar.activeBorder": "#ff0077",
+      "activityBar.foreground": "#66aa66",
+      "activityBar.inactiveForeground": "#eeeeee",
+      "tab.border": "#777777",
+      "tab.activeBorder": "#66ff66",
+      "tab.activeBackground": "#002000",
+      "editorBracketMatch.border": "#22ff00",
+      "editorBracketMatch.background": "#003000",
+      "sideBarSectionHeader.foreground": "#d5fa6e"
+    }
 }
