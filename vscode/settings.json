@@ -1,22 +1,80 @@
 {
-    "telemetry.enableTelemetry": false,
-    "workbench.statusBar.feedback.visible": false,
-    "files.associations": {
-        "*.template": "jinja-yaml"
-    },
+    "cSpell.enabled": false,
+    "cSpell.userWords": [
+      "cnect"
+    ],
+    "editor.detectIndentation": false,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "java.configuration.checkProjectSettingsExclusions": false,
-    "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:\"/Users/todd.trimmer/.vscode/extensions/gabrielbb.vscode-lombok-0.9.9/server/lombok.jar\"",
     "editor.tabSize": 2,
-    "[ruby]": {},
-    "window.zoomLevel": 0,
-    "editor.minimap.scale": 2,
-    "editor.renderWhitespace": "selection",
-    "debug.showBreakpointsInOverviewRuler": true,
+    "editor.tokenColorCustomizations": {
+      "[Default Dark+]": {
+        "textMateRules": [
+          {
+            "scope": "constant.numeric",
+            "settings": {
+              "foreground": "#f5562f"
+            }
+          },
+          {
+            "scope": "keyword.control",
+            "settings": {
+              "foreground": "#aaf7d3"
+            }
+          },
+          {
+            "scope": "keyword.operator",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          },
+          {
+            "scope": "meta.block",
+            "settings": {
+              "foreground": "#d96efa"
+            }
+          },
+          {
+            "scope": "meta.brace",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          },
+          {
+            "scope": "punctuation.separator",
+            "settings": {
+              "foreground": "#ff00f7"
+            }
+          }
+        ]
+      }
+    },
+    "editor.unfoldOnClickAfterEndOfLine": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "terminal.external.linuxExec": "xterm",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.integrated.defaultProfile.osx": "bash5",
+    "terminal.integrated.profiles.osx": {
+      "bash5": {
+        "args": ["-l"],
+        "icon": "terminal-bash",
+        "path": "/usr/local/bin/bash"
+      }
+    },
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "window.zoomLevel": 3,
     "workbench.colorCustomizations": {
-        "window.activeBorder": "#070",
-        "activityBar.activeBorder": "#69ffff",
-        "activityBar.activeBackground": "#555"
+      "activityBar.activeBackground": "#002000",
+      "activityBar.activeBorder": "#ff0077",
+      "activityBar.foreground": "#66aa66",
+      "activityBar.inactiveForeground": "#eeeeee",
+      "editorBracketMatch.background": "#6db86d",
+      "editorBracketMatch.border": "#22ff00",
+      "sideBarSectionHeader.foreground": "#d5fa6e",
+      "tab.activeBackground": "#002000",
+      "tab.activeBorder": "#66ff66",
+      "tab.border": "#777777"
     }
 }
