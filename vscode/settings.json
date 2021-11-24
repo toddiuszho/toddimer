@@ -14,39 +14,47 @@
         "textMateRules": [
           {
             "scope": "constant.numeric",
-            "settings": {
-              "foreground": "#f5562f"
-            }
+            "settings": {"foreground": "#f5562f"}
           },
           {
             "scope": "keyword.control",
-            "settings": {
-              "foreground": "#aaf7d3"
-            }
+            "settings": {"foreground": "#aaf7d3"}
           },
           {
             "scope": "keyword.operator",
-            "settings": {
-              "foreground": "#ff00f7"
-            }
+            "settings": {"foreground": "#ff00f7"}
           },
           {
             "scope": "meta.block",
-            "settings": {
-              "foreground": "#d96efa"
-            }
+            "settings": {"foreground": "#d96efa"}
           },
           {
             "scope": "meta.brace",
-            "settings": {
-              "foreground": "#ff00f7"
-            }
+            "settings": {"foreground": "#ff00f7"}
+          },
+          {
+            "scope": "punctuation.definition.block",
+            "settings": {"foreground": "#d96efa"}
+          },
+          {
+            "scope": "punctuation.definition.parameters.begin.ts",
+            "settings": {"foreground": "#eeff00"}
+          },
+          {
+            "scope": "punctuation.definition.parameters.end.ts",
+            "settings": {"foreground": "#eeff00"}
           },
           {
             "scope": "punctuation.separator",
-            "settings": {
-              "foreground": "#ff00f7"
-            }
+            "settings": {"foreground": "#ff00f7"}
+          },
+          {
+            "scope": "storage.modifier",
+            "settings": {"foreground": "#9999ff"}
+          },
+          {
+            "scope": "storage.type",
+            "settings": {"foreground": "#ad9236"}
           }
         ]
       }
@@ -70,7 +78,7 @@
       "activityBar.activeBorder": "#ff0077",
       "activityBar.foreground": "#66aa66",
       "activityBar.inactiveForeground": "#eeeeee",
-      "editorBracketMatch.background": "#6db86d",
+      "editorBracketMatch.background": "#002500",
       "editorBracketMatch.border": "#22ff00",
       "sideBarSectionHeader.foreground": "#d5fa6e",
       "tab.activeBackground": "#002000",
