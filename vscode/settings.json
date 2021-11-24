@@ -7,11 +7,20 @@
     "editor.fontFamily": "Consolas, 'Courier New', monospace",
     "editor.minimap.enabled": false,
     "editor.renderWhitespace": "none",
+    "editor.semanticHighlighting.enabled": false,
     "editor.suggestSelection": "first",
     "editor.tabSize": 2,
     "editor.tokenColorCustomizations": {
       "[Default Dark+]": {
         "textMateRules": [
+          {
+            "scope": "constant.language.boolean.false",
+            "settings": {"foreground": "#f5562f"}
+          },
+          {
+            "scope": "constant.language.boolean.true",
+            "settings": {"foreground": "#5f5"}
+          },
           {
             "scope": "constant.numeric",
             "settings": {"foreground": "#f5562f"}
@@ -31,6 +40,14 @@
           {
             "scope": "meta.brace",
             "settings": {"foreground": "#ff00f7"}
+          },
+          {
+            "scope": "meta.brace.round",
+            "settings": {"foreground": "#eeff00"}
+          },
+          {
+            "scope": "meta.object-literal.key",
+            "settings": {"foreground": "#fff"}
           },
           {
             "scope": "punctuation.definition.block",
@@ -55,6 +72,14 @@
           {
             "scope": "storage.type",
             "settings": {"foreground": "#ad9236"}
+          },
+          {
+            "scope": "variable.other.object.property.ts",
+            "settings": {"foreground": "#ad9236"}
+          },
+          {
+            "scope": "variable.other.property",
+            "settings": {"foreground": "#fff"}
           }
         ]
       }
@@ -72,7 +97,7 @@
       }
     },
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "window.zoomLevel": 3,
+    "window.zoomLevel": 1,
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#002000",
       "activityBar.activeBorder": "#ff0077",
