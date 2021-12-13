@@ -1,19 +1,37 @@
-credential.helper=osxkeychain
-user.name=Todd Trimmer
-user.email=todd.trimmer@gmail.com
-alias.logline=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-alias.co=checkout
-tag.sort=version:refname
-core.pager=diff-so-fancy | less --tabs=4 -RFX
-core.excludesfile = ~/.gitignore_global
-color.diff-highlight.oldnormal=red bold
-color.diff-highlight.oldhighlight=red bold 52
-color.diff-highlight.newnormal=green bold
-color.diff-highlight.newhighlight=green bold 22
-color.diff.meta=11
-color.diff.frag=magenta bold
-color.diff.commit=yellow bold
-color.diff.old=red bold
-color.diff.new=green bold
-color.diff.whitespace=red reverse
-pull.rebase=false
+[alias]
+	co = checkout
+	logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	scrub = clean -fd
+    shove = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
+    squash = !git checkout develop && git merge --squash @{-1} && git commit -m
+[color]
+	ui = true
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[core]
+	excludesfile = /Users/ttrimmer/.gitignore_global
+    pager = diff-so-fancy | less --tabs=4 -RFX
+[credential]
+    helper = osxkeychain
+[init]
+    defaultBranch = main
+[interactive]
+    diffFilter = diff-so-fancy --patch
+[pull]
+	rebase = false
+[tag]
+	sort = version:refname
+[user]
+	name = todd.trimmer
+	email = todd.trimmer@gmail.com
