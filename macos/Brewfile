@@ -1,16 +1,23 @@
-bash
-bat
-coreutils
-duf
-exa
-fd
-findutils
-gawk
-gettext
-git
-grep
-htop
-http
-ncdu
-tldr
-yq
+tap homebrew/core
+
+brew bash
+brew bat
+brew coreutils
+brew duf
+brew exa
+brew fd
+brew findutils
+brew gawk
+brew gettext
+brew git
+brew grep
+brew htop
+brew http
+brew ncdu
+brew tldr
+brew yq
+
+
+tap homebrew cask
+
+cask keepassxc
