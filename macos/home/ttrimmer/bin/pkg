@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+if ! [ -f package.json ]; then
+  echo "No package.json found!" >&2
+  exit 1
+fi
+
+cmd="$1"
+target="$2"
+tc=''
+if [ -n "${target}" ]; then
+  tc=".${target}"
+fi
+
+case "${cmd}" in
+  dep) cat package.json | jq ".dependencies${tc}";;
+  dependencies) cat package.json | jq ".dependencies${tc}";;
+  dev) cat package.json | jq ".devDependencies${tc}";;
+  devDependencies) cat package.json | jq ".devDependencies${tc}";;
+  help) echo "pkg CMD [TARGET]";
+        echo "";
+        echo "Commands:";
+        echo "  dep | dependencies           List dependencies";
+        echo "  dev | devDependencies        List development dependencies";
+        echo "  help                         Print usage";
+        echo "  info                         Print name@version of package";
+        echo "  name                         Print name of package";
+        echo "  scr | scripts                List scripts";
+        echo "  ver | version                Print version of package";;
+  info) echo -ne "\033[32m"; cat package.json | jq -r '(.name + "@" + .version)'; echo -ne "\033[0m";;
+  name) echo -ne "\033[32m"; cat package.json | jq -r '.name'; echo -ne "\033[0m";;
+  scr) cat package.json | jq ".scripts${tc}";;
+  scripts) cat package.json | jq ".scripts${tc}";;
+  ver) echo -ne "\033[32m"; cat package.json | jq -r '.version'; echo -ne "\033[0m";;
+  version) echo -ne "\033[32m"; cat package.json | jq -r '.version'; echo -ne "\033[0m";;
+esac
+
