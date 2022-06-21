@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+apex='engineering11.com'
+record_combos=(ns:$apex ns:dev-cpln.$apex ns:qa-cpln.$apex a:pdfgen.dev-cpln.$apex)
+nameservers=(1.1.1.1 devin.ns.cloudflare.com mimi.ns.cloudflare.com ns1.cpln.live ns2.cpln.live ns1.cpln.cloud ns2.cpln.cloud)
+dig_flags=(+short)
+
+
+for opt in "$@"; do
+  case "$opt" in
+    --raw) dig_flags=();;
+  esac
+done
+
+exact() {
+  for combo in "${record_combos[@]}"; do
+    for ns in "${nameservers[@]}"; do
+      record_type="${combo%%:*}"
+      record_name="${combo#*:}"
+      echo -e "\n\033[35m${record_type} \033[32m${record_name}\033[35m via ${ns}\n-----\033[0m"
+      dig @${ns} ${dig_flags[@]} -t ${record_type} "${record_name}"
+    done
+ done
+}
+
+loose() {
+  for combo in "${record_combos[@]}"; do
+    record_type="${combo%%:*}"
+    record_name="${combo#*:}"
+    echo -e "\n\033[32m${record_name}\033[35m\n-----\033[0m"
+    dig ${dig_flags[@]} "${record_name}"
+ done
+}
+
+loose
+

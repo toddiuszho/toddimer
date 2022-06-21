@@ -33,5 +33,6 @@ case "${cmd}" in
   scripts) cat package.json | jq ".scripts${tc}";;
   ver) echo -ne "\033[32m"; cat package.json | jq -r '.version'; echo -ne "\033[0m";;
   version) echo -ne "\033[32m"; cat package.json | jq -r '.version'; echo -ne "\033[0m";;
+  *) cat package.json | jq -r ".${cmd}"
 esac
 

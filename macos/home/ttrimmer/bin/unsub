@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+. ./lib/color.sh
+. ./lib/log.sh
+
+declare -a required_envars=(MG_API_KEY MG_DOMAIN)
+
+for req in "${required_envars[@]}"; do
+  if [ -z "${!req}" ]; then
+    log-error "Required envar [${req}] is not set!"
+    exit 1
+  fi
+done
+
+curl -s --user "api:${MG_API_KEY}" \
+  "https://api.mailgun.net/v3/${MG_DOMAIN}/messages" \
+  -F from="Excited User <noreply@${MG_DOMAIN}>" \
+  -F to="unsub-test@${MG_DOMAIN}" \
+  -F subject='Hello' \
+  -F text='Testing some Mailgun awesomeness!' \
+  -w '\n%{http_code}\n'
+
+log-result $? "Email send"

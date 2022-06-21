@@ -3,8 +3,48 @@ alias d='gls -FlaGh --color=yes'
 alias dg='gls -Fla --color=yes'
 alias dn='gls -Flan --color=yes'
 
+# Misc
+alias hl='head -n34'
+
 # Git
 PATH="${PATH}:${HOME}/bin:${HOME}/github/so-fancy/diff-so-fancy"
+alias gsave='export OLD_BRANCH=$(git rev-parse --abbrev-ref HEAD)'
+alias grestore='git checkout $OLD_BRANCH'
+
+preexec() {
+  _last_command=$1
+  if [ "UNSET" == "${_timer}" ]; then
+    _timer=$SECONDS
+  else 
+    _timer=${_timer:-$SECONDS}
+  fi 
+}
+
+_maybe_speak() {
+    local elapsed_seconds=$1
+    # if (( elapsed_seconds > 30 )); then
+    #     local c
+    #     c=$(echo "${_last_command}" | cut -d' ' -f1)
+    #     ( say "finished ${c}" & )
+    # fi
+}
+
+precmd() {
+  if [ "UNSET" == "${_timer}" ]; then
+     timer_show="0s"
+  else 
+    elapsed_seconds=$((SECONDS - _timer))
+    _maybe_speak ${elapsed_seconds}
+    timer_show="$(format-duration seconds $elapsed_seconds)"
+  fi
+  _timer="UNSET"
+
+  # History stuff from http://unix.stackexchange.com/questions/200225/search-history-from-multiple-bash-session-only-when-ctrl-r-is-used-not-when-a
+  # Whenever a command is executed, write it to a global history
+  history -a ~/.bash_history.global
+}
+
+[ -f "${HOME}/.bash-preexec.sh" ] && . "${HOME}/.bash-preexec.sh"
 
 # Prompt and Title
 case $TERM in
@@ -58,7 +98,8 @@ for scr in path completion; do
 done
 unset scr
 unset fullscr
-export CLOUDSDK_PYTHON=/usr/bin/python
+#export CLOUDSDK_PYTHON=/usr/bin/python
+export CLOUDSDK_PYTHON=/usr/bin/python3
 
 # Terraform
 #PATH="$PATH:/opt/terraform/default"
@@ -113,16 +154,39 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Dynamic bash completions
-if [ -d "${HOME}/.local/share/bash-completion/completions/" ]; then
-  for fz in $(LC_COLLATE=C ls -1 ${HOME}/.local/share/bash-completion/completions); do
-    . "${fz}"
-  done
-fi
+declare -a completion_dirs=(
+  ${HOME}/.local/share/bash-completion/completions
+  #/opt/homebrew/etc/bash_completion.d
+)
+for completion_dir in "${completion_dirs[@]}"; do
+  if [ -d "${completion_dir}" ]; then
+    for fz in $(LC_COLLATE=C ls -1 ${completion_dir}); do
+      [ 'brew' != "${fz}" ] && . "${fz}"
+    done
+  fi
+done
 
 # npm
 if which npmrc-export 2>&1 >/dev/null; then
   . <(npmrc-export)
 fi
+alias nixnm="find . -name "node_modules" -type d -prune -exec rm -rf '{}' +"
 
 # ecli
-# export GOOGLE_APPLICATION_CREDENTIALS=$(gfind ${HOME}/.ecli -type f -name '*.json')
+export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.ecli/engineering11-cli.json
+
+# diff
+cdiff() {
+  if [ $# -lt 2 ]; then
+    echo "Needs at least 2 args" >&2
+    return 1
+  fi
+  left="$1"
+  right="$2"
+  shift 2
+  diff -u "$right" "$left" "$@" | diff-so-fancy
+}
+
+# yarn
+alias yarnroot='eval "cd $(${HOME}/bin/yarnroot/yarnroot)"'
+
