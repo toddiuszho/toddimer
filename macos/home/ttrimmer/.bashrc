@@ -11,46 +11,27 @@ PATH="${PATH}:${HOME}/bin:${HOME}/github/so-fancy/diff-so-fancy"
 alias gsave='export OLD_BRANCH=$(git rev-parse --abbrev-ref HEAD)'
 alias grestore='git checkout $OLD_BRANCH'
 
-preexec() {
-  _last_command=$1
-  if [ "UNSET" == "${_timer}" ]; then
-    _timer=$SECONDS
-  else 
-    _timer=${_timer:-$SECONDS}
-  fi 
+# Command Duration
+_timer_display='0s'
+timer_start() {
+  _timer=${_timer:-$SECONDS}
 }
-
-_maybe_speak() {
-    local elapsed_seconds=$1
-    # if (( elapsed_seconds > 30 )); then
-    #     local c
-    #     c=$(echo "${_last_command}" | cut -d' ' -f1)
-    #     ( say "finished ${c}" & )
-    # fi
+timer_stop() {
+  local elapsed=$(( $SECONDS - $_timer ))
+  local formatted="$(format-duration seconds $elapsed)"
+  _timer_display="${formatted}"
+  unset _timer
 }
-
-precmd() {
-  if [ "UNSET" == "${_timer}" ]; then
-     timer_show="0s"
-  else 
-    elapsed_seconds=$((SECONDS - _timer))
-    _maybe_speak ${elapsed_seconds}
-    timer_show="$(format-duration seconds $elapsed_seconds)"
-  fi
-  _timer="UNSET"
-
-  # History stuff from http://unix.stackexchange.com/questions/200225/search-history-from-multiple-bash-session-only-when-ctrl-r-is-used-not-when-a
-  # Whenever a command is executed, write it to a global history
-  history -a ~/.bash_history.global
+timer_show() {
+  echo "${_timer_display}"
 }
-
-[ -f "${HOME}/.bash-preexec.sh" ] && . "${HOME}/.bash-preexec.sh"
+trap 'timer_start' DEBUG
 
 # Prompt and Title
 case $TERM in
   xterm*)
     #PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}\007"';
-    PROMPT_COMMAND='echo -ne "\033]0;$(basename $(pwd))\007"';
+    #PROMPT_COMMAND='echo -ne "\033]0;$(basename $(pwd))\007"';
     PS1='[\[\e[35m\]\t \[\e[36m\]\h \[\e[33m\]\W\[\e[0m\]]\$ ';;
     #PS1="\[\033]0;\u@\h: \w\007\]bash\\$ ";;
   *)
