@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+declare -a platforms=(cnect isd)
+declare -a environments=(ci dev qa stage prod demo)
+declare -A cnect_stems=([qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A isd_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A all_stems=()
+for p in ${platforms[@]}; do
+  for e in ${environments[@]}; do
+    val=$(eval 'echo ${'${p}_stems[${e}]'}')
+    if [ -n "$val" ]; then
+      all_stems[${p}-${e}]=$val
+    fi
+  done
+done
+
+declare -a platforms_to_do=()
+declare -A platform_environment_omits=()
+declare platform=''
+
+for arg in "$@"; do
+  case "$arg" in
+    -*)
+      env="${arg#-}"
+      if [ -z "$platform" ]; then
+        for plat in ${platforms[@]}; do 
+          omit_string="${platform_environment_omits[$plat]} ${env}"
+          platform_environment_omits[$plat]="$omit_string"
+        done
+      else
+        omit_string="${platform_environment_omits[$platform]} ${env}"
+        platform_environment_omits[$platform]="$omit_string"
+      fi;;
+    *)
+      platform=$arg
+      declare -i match=1
+      for pmatch in ${platforms[@]}; do
+        if [ "$platform" = "$pmatch" ]; then
+          match=0
+          break
+        fi
+      done
+      if [ $match -ne 0 ]; then
+        echo "Unknown platform [${platform}]" >&2
+        exit 1
+      fi;
+      platforms_to_do+=($platform);;
+  esac
+done
+
+if [ ${#platforms_to_do[@]} -eq 0 ]; then
+  platforms_to_do=(${platforms[@]})
+fi
+
+for pl in ${platforms_to_do[@]}; do
+  declare -A environment_omits=()
+  for omit in ${platform_environment_omits[$pl]}; do
+    environment_omits[$omit]='yes'
+  done
+
+  for environment in ${environments[@]}; do
+    if [ -n "${environment_omits[$environment]}" ]; then
+      continue
+    fi
+    suffix=''
+    stem="${all_stems[${pl}-${environment}]}"
+    if [ -n "$stem" ]; then
+      suffix="-${stem}"
+    fi
+    echo -n "${pl}-${environment}${suffix} "
+  done
+done
+echo ''
