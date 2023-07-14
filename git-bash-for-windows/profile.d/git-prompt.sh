@@ -31,9 +31,8 @@ else
 			PS1="$PS1"'`__git_ps1`'   # bash function
 		fi
 	fi
-	PS1="$PS1"'\[\033[0m\]'        # change color
-	PS1="$PS1"'\n'                 # new line
-	PS1="$PS1"'$ '                 # prompt: always $
+	PS1="$PS1"'\[\033[0m\] $'        # change color
+	#PS1="$PS1"'$ '                 # prompt: always $
 fi
 
 MSYS2_PS1="$PS1"               # for detection by MSYS2 SDK's bash.basrc
