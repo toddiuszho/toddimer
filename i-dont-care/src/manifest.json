@@ -1,0 +1,12 @@
+{
+  "name": "Hide Care Reaction on Facebook",
+  "version": "1.0",
+  "description": "Blocks the Care reaction on Facebook and all notifications about it.",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["https://www.facebook.com/*"],
+      "js": ["contentscript.js"]
+    }
+  ]
+}
