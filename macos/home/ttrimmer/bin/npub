@@ -8,7 +8,7 @@ echo -e "${color_magenta}Publishing ${info} ...${color_normal}"
 yarn npm publish
 declare -i statusCode=$?
 if [ $statusCode -eq 0 ]; then
-  echo -e "${color_red}Successfully published ${info}${color_normal}"
+  echo -e "${color_green}Successfully published ${info}${color_normal}"
 else
   echo -e "${color_red}Failed to publish ${info}${color_normal}"
 fi
