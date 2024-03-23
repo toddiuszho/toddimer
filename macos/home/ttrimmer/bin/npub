@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+info="$(node -r './package.json' -e 'pkg = require("./package.json"); console.log(`${pkg.name}@${pkg.version}`)')"
+color_magenta='\033[35m'
+color_red='\033[31m'
+color_green='\033[32m'
+color_normal='\033[0m'
+echo -e "${color_magenta}Publishing ${info} ...${color_normal}"
+yarn npm publish
+declare -i statusCode=$?
+if [ $statusCode -eq 0 ]; then
+  echo -e "${color_green}Successfully published ${info}${color_normal}"
+else
+  echo -e "${color_red}Failed to publish ${info}${color_normal}"
+fi
+exit $statusCode

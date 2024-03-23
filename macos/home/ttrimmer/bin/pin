@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+declare deeper=''
+while getopts 'd:' opt; do
+  case "${opt}" in
+    d) deeper=".${OPTARG}";;
+    \?) echo "Unknown option: ${opt}" >&2; exit 1;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+OPTIND=0
+
+cmd="$1"
+target="$2"
+s_magic='package.json'
+n_magic="${#s_magic}"
+
+package_source() {
+  if [ -z "${target}" ]; then
+    echo ${s_magic}
+  elif [ ${s_magic} = "${target:$(( ${#target} - $n_magic )):${n_magic}}" ]; then
+    echo "${target}"
+  elif [ '/' = "${target:$(( ${#target} - 1 )):1}" ]; then
+    echo "${target}${s_magic}"
+  else
+    echo "${target}/${s_magic}"
+  fi
+}
+
+case "${cmd}" in
+  dep) cat $(package_source) | jq ".dependencies${deeper}";;
+  dependencies) cat $(package_source) | jq ".dependencies${deeper}";;
+  dev) cat $(package_source) | jq ".devDependencies${deeper}";;
+  devDependencies) cat $(package_source) | jq ".devDependencies${deeper}";;
+  help) echo "pkg CMD [TARGET]";
+        echo "";
+        echo "Commands:";
+        echo "  dep | dependencies           List dependencies";
+        echo "  dev | devDependencies        List development dependencies";
+        echo "  help                         Print usage";
+        echo "  info                         Print name@version of package";
+        echo "  name                         Print name of package";
+        echo"   peer | peerDependencies      List peer dependencies";
+        echo "  scr | scripts                List scripts";
+        echo "  ver | version                Print version of package";;
+  info) echo -ne "\033[32m"; cat $(package_source) | jq -r '(.name + "@" + .version)'; echo -ne "\033[0m";;
+  name) echo -ne "\033[32m"; cat $(package_source) | jq -r '.name'; echo -ne "\033[0m";;
+  peer) cat $(package_source) | jq ".peerDependencies${deeper}";;
+  peerDependencies) cat $(package_source) | jq ".peerDependencies${deeper}";;
+  scr) cat $(package_source) | jq ".scripts${deeper}";;
+  scripts) cat $(package_source) | jq ".scripts${deeper}";;
+  ver) echo -ne "\033[32m"; cat $(package_source) | jq -r '.version'; echo -ne "\033[0m";;
+  version) echo -ne "\033[32m"; cat $(package_source) | jq -r '.version'; echo -ne "\033[0m";;
+  all) cat $(package_source) | jq '.';;
+  *) cat $(package_source) | jq -r ".${cmd}";;
+esac
+

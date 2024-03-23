@@ -1,0 +1,137 @@
+<html>
+
+<body>
+	<br />usefull chrome://usb-internals/
+	<br />usefull chrome://device-log
+	<br />usefull https://web.dev/hid/
+	<br />
+	<br /><button id="btnRed" onclick="glow([255,0,0])">RED</button>
+	<br /><button id="btnGreen" onclick="glow([0,255,0])">GREEN</button>
+	<br /><button id="btnBlue" onclick="glow([0,0,255])">BLUE</button>
+	<br /><button id="btnRdm" onclick="randomize()">RANDOMIZE</button>
+	<br /><button id="btnCycle" onclick="cycle()">CYCLE</button>
+	<br /><button id="stop-button">turn off and disconnect</button>
+
+	<script>
+		document.getElementById('stop-button').addEventListener('click', handleDisconnectClick);
+
+		function d2r(degrees) {
+			return degrees * (Math.PI / 180);
+		}
+
+		function sleep(milliseconds) {
+			const date = Date.now();
+			let currentDate = null;
+			do {
+				currentDate = Date.now();
+			} while (currentDate - date < milliseconds);
+		}
+
+		async function cycle() {
+			let device = await openDevice();
+			let saturation = 1;
+			let lightness = 0.5;
+			let d = saturation * (1 - Math.abs(2 * lightness - 1));
+			let m = 255 * (lightness - d / 2);
+			while (true) {
+				for (let hue = 0; hue < 360; hue++) {
+					let x = d * (1 - Math.abs((hue / 60) % 2 - 1));
+					if (hue >= 0 && hue < 60) {
+						var red = 255 * d + m;
+						var green = 255 * x + m;
+						var blue = m;
+					}
+					else if (hue >= 60 && hue < 120) {
+						var red = 255 * x + m;
+						var green = 255 * d + m;
+						var blue = m;
+					}
+					else if (hue >= 120 && hue < 180) {
+						var red = m;
+						var green = 255 * d + m;
+						var blue = 255 * x + m;
+					}
+					else if (hue >= 180 && hue < 240) {
+						var red = m;
+						var green = 255 * x + m;
+						var blue = 255 * d + m;
+					}
+					else if (hue >= 240 && hue < 300) {
+						var red = 255 * x + m;
+						var green = m;
+						var blue = 255 * d + m;
+					}
+					else {
+						var red = 255 * d + m;
+						var green = m;
+						var blue = 255 * x + m;
+					}
+					red = Math.round(red);
+					green = Math.round(green);
+					blue = Math.round(blue);
+					await colorize(device, [red, green, blue]);
+					sleep(10);
+				}
+			}
+		}
+
+		async function randomize() {
+			let device = await openDevice();
+			while (true) {
+				let red = Math.floor(Math.random() * 3) * 127;
+				let green = Math.floor(Math.random() * 3) * 127;
+				let blue = Math.floor(Math.random() * 3) * 127;
+				await colorize(device, [red, green, blue]);
+				sleep(500);
+			}
+		}
+
+		async function glow(rgb) {
+			let device = await openDevice();
+			await colorize(device, rgb);
+		}
+
+		async function handleDisconnectClick() {
+			let device = await openDevice();
+			if (!device) return;
+			let acolor = [0, 0, 0];	// off
+			await colorize(device, acolor);
+			await device.close();
+		}
+
+		async function openDevice() {
+			const vendorId = 0x2c0d;	// embrava.com
+			const productId = 0x000c;	// blynclight standard
+			const device_list = await navigator.hid.getDevices();
+			let device = device_list.find(d => d.vendorId === vendorId && d.productId === productId);
+
+			if (!device) {
+				let devices = await navigator.hid.requestDevice({
+					filters: [{ vendorId, productId }],
+				});
+				console.log("devices:", devices);
+				device = devices[0];
+				if (!device) return null;
+			}
+			if (!device.opened) {
+				await device.open();
+			}
+			console.log("device opened:", device);
+			return device;
+		}
+
+		async function colorize(device, [r, g, b]) {
+			if (!device) return;
+			const data = Uint8Array.from([r, b, g, 0x00, 0x00, 0x40, 0x02, 0xFF22]);
+			// 4th parameter is light control, 0 is stable, 70 is fast blink?, 100 is medium blink?
+			try {
+				await device.sendReport(0, data);	//If the HID device does not use report IDs, set reportId to 0.
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+	</script>
+</body>
+
+</html>

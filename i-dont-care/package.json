@@ -1,0 +1,19 @@
+{
+    "name": "i-dont-care",
+    "version": "1.0.0",
+    "description": "Build Chrome extension to block the Care reaction",
+    "main": "utils/zip.js",
+    "scripts": {
+      "clean": "rimraf dist",
+      "mkdist": "node utils/mkdist.js",
+      "prepack": "npm run clean && npm run mkdist && npm run zip",
+      "zip": "node utils/zip.js"
+    },
+    "dependencies": {
+      "archiver": "^5.3.0",
+      "shelljs": "^0.8.5",
+      "rimraf": "^3.0.3"
+    },
+    "license": "MIT"
+  }
+  
