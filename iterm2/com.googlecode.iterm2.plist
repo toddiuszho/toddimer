@@ -6,6 +6,8 @@
 	<string>/bin/zsh</string>
 	<key>Default Bookmark Guid</key>
 	<string>3FAB21EC-3C84-4172-83FD-13D15D8C5BB2</string>
+	<key>DisableTransparencyForKeyWindow</key>
+	<false/>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
