@@ -1,9 +1,33 @@
 #!/usr/bin/env bash
-declare -a platforms=(cnect isd)
+
+BLIMP_LIB=${BLIMP_LIB:-$HOME/lib}
+
+if [ -f "${BLIMP_LIB}/core_friendly.sh" ]; then
+  . "${BLIMP_LIB}/core_friendly.sh"
+else
+  echo "Could not find core_friendly.sh library!" >&2
+  exit 1
+fi
+
+if ! bash_check; then
+  echo "Your shell must be Bash >= 4.0 to continue!"
+  exit 1
+fi
+
+declare -a platforms=(c11oud c2 cnect e11 explainitai graydi ingest isd playbook showcase six11)
 declare -a environments=(ci dev qa stage prod demo)
+declare -A c11oud_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
 declare -A cnect_stems=([qa]=100 [stage]=100 [prod]=100 [demo]=100)
-declare -A isd_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A e11_stems=([ci]=100 [dev]=NONE [qa]=NONE [stage]=NONE [prod]=NONE [demo]=NONE)
+declare -A explainitai_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A graydi_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A ingest_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A isd_stems=([ci]=200 [dev]=200 [qa]=200 [stage]=NONE [prod]=200 [demo]=NONE)
+declare -A playbook_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A showcase_stems=([ci]=100 [dev]=100 [qa]=NONE [stage]=NONE [prod]=NONE [demo]=NONE)
+declare -A six11_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=NONE [prod]=100 [demo]=100)
 declare -A all_stems=()
+declare -A project_prefixes=([playbook]=playbook11 [showcase]=showcase11)
 for p in ${platforms[@]}; do
   for e in ${environments[@]}; do
     val=$(eval 'echo ${'${p}_stems[${e}]'}')
@@ -19,6 +43,10 @@ declare platform=''
 
 for arg in "$@"; do
   case "$arg" in
+    --brand=*) pj="${arg#*=}"; gcloud alpha iap oauth-clients list projects/$pj/brands/$(gcloud projects describe $pj --project=$pj --format='value(projectNumber)') --project=$pj --format=yaml; exit 0;;
+    --number=*) pj="${arg#*=}"; gcloud projects describe $pj --project=$pj --format='value(projectNumber)'; exit 0;;
+    --show=*) pj="${arg#*=}"; echo -e "\n\033[35m${pj}\n---------------\033[0m"; exit 0;;
+    --*) echo -e "\033[31mUnknown option $arg\033[0m" >&2; exit 1;;
     -*)
       env="${arg#-}"
       if [ -z "$platform" ]; then
@@ -30,6 +58,7 @@ for arg in "$@"; do
         omit_string="${platform_environment_omits[$platform]} ${env}"
         platform_environment_omits[$platform]="$omit_string"
       fi;;
+    ALL) platforms_to_do+=(${platforms[@]}); break;;
     *)
       platform=$arg
       declare -i match=1
@@ -64,9 +93,14 @@ for pl in ${platforms_to_do[@]}; do
     suffix=''
     stem="${all_stems[${pl}-${environment}]}"
     if [ -n "$stem" ]; then
+      if [ 'NONE' = "$stem" ]; then
+        continue
+      fi
       suffix="-${stem}"
     fi
-    echo -n "${pl}-${environment}${suffix} "
+    prefix="${project_prefixes[$pl]}"
+    [ -z "$prefix" ] && prefix="$pl"
+    echo -n "${prefix}-${environment}${suffix} "
   done
 done
 echo ''
