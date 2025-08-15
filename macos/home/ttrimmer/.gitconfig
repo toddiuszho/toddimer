@@ -1,0 +1,75 @@
+[alias]
+    a = add
+    ad = add
+    b = branch
+    br = branch
+    brnch = branch
+    co = checkout
+    cm = commit
+    cmm = commit
+    conflicts = diff --name-only --diff-filter=U
+    d = diff
+    dif = diff
+    df = diff
+    dff = diff
+    fa = fetch --all
+    hard = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD) && git clean -fd
+    logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    new = checkout -b
+    olddiff = -c core.pager=less -c color.ui=false diff
+    olediff = -c core.pager=less -c color.ui=false diff
+    oldiff = -c core.pager=less -c color.ui=false diff
+    pa = pull --all
+    pl = pull
+    pu = pull
+    pul = pull
+    ps = push
+    pus = push
+    psh = push
+    ph = push
+    rpo = remote prune origin
+	s = status
+    scrub = clean -fd
+    shove = !git push -u origin $(git rev-parse --abbrev-ref HEAD)
+    squash = !git checkout develop && git merge --squash @{-1} && git commit -m
+    st = status
+    sta = status
+    stat = status
+    statu = status
+[color]
+    ui = true
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+[core]
+    excludesfile = /Users/ttrimmer/.gitignore_global
+    pager = diff-so-fancy | less --tabs=4 -RFX
+	ignorecase = false
+[credential]
+    helper = osxkeychain
+[init]
+    defaultBranch = main
+[interactive]
+    diffFilter = diff-so-fancy --patch
+[pull]
+    rebase = false
+[tag]
+    sort = version:refname
+[user]
+    name = todd.trimmer
+    email = todd.trimmer@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

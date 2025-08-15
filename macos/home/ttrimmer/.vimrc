@@ -71,6 +71,9 @@ nmap <leader>w :w!<cr>
 " Set 7 lines to the cursor - when moving vertically using j/k
 set so=7
 
+" Turn on new regex parser
+set re=0
+
 " Turn on the WiLd menu
 set wildmenu
 

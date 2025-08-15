@@ -5,11 +5,47 @@ alias dn='gls -Flan --color=yes'
 
 # Misc
 alias hl='head -n34'
+alias o='open'
 
 # Git
 PATH="${PATH}:${HOME}/bin:${HOME}/github/so-fancy/diff-so-fancy"
 alias gsave='export OLD_BRANCH=$(git rev-parse --abbrev-ref HEAD)'
 alias grestore='git checkout $OLD_BRANCH'
+alias gprint='echo $OLD_BRANCH'
+alias g='git'
+alias gaa='git add -A'
+alias gcd='git checkout develop'
+alias gbd='git branch -D'
+alias gpd='git push --delete origin'
+alias gdno='git diff --name-only'
+alias gu='git diff --name-only --diff-filter U'
+alias gvm='vi $(git diff --name-only --diff-filter U | ggrep -v yarn.lock)'
+gmb() {
+  gh repo view --json defaultBranchRef --jq .defaultBranchRef.name
+}
+gcm() {
+  git checkout $(gmb)
+}
+gcmb() {
+  gcm
+}
+gpbd() {
+  #if [ -z "$1" ]; then
+  #  echo "Usage: gpbd BRANCH_NAME" >&2
+  #  return 1
+  #fi
+  local branch="$1"
+  [ -z "${branch}" ] && branch="$(git rev-parse --abbrev-ref HEAD)"
+  git checkout $(gmb) && git pull
+  git push --delete origin "${branch}"
+  git branch -D "${branch}"
+  git remote prune origin
+}
+gd() {
+  git diff
+  git ls-files --others --exclude-standard |
+    while read -r i; do git diff --color -- /dev/null "$i"; done
+}
 
 # Command Duration
 _timer_display='0s'
@@ -81,9 +117,13 @@ unset scr
 unset fullscr
 #export CLOUDSDK_PYTHON=/usr/bin/python
 export CLOUDSDK_PYTHON=/usr/bin/python3
+gs() {
+  gcloud secrets versions access latest --secret="$1" --project="$2"
+}
 
 # Terraform
 #PATH="$PATH:/opt/terraform/default"
+alias tf='terraform'
 
 # GNU + Dupes = GNUpes
 declare -a gnupes=(find grep)
@@ -124,6 +164,11 @@ alias nssh="ssh -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' 
 scr="${HOME}/github/toddiuszho/gman/gman.sh"
 [ -f "${scr}" ] && . "${scr}"
 unset scr
+export GOOGLE_CLOUD_QUOTA_PROJECT=e11-sandbox
+
+chromedns() {
+  defaults write com.google.Chrome BuiltInDnsClientEnabled -bool $1
+}
 
 fuego-cnect() {
   export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/.config/gcloud/legacy_credentials/cnect.owner@gmail.com/adc.json"
@@ -133,6 +178,7 @@ fuego-cnect() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+alias archx='arch -x86_64 /usr/bin/env bash -l'
 
 # Dynamic bash completions
 declare -a completion_dirs=(
@@ -142,7 +188,7 @@ declare -a completion_dirs=(
 for completion_dir in "${completion_dirs[@]}"; do
   if [ -d "${completion_dir}" ]; then
     for fz in $(LC_COLLATE=C ls -1 ${completion_dir}); do
-      [ 'brew' != "${fz}" ] && . "${fz}"
+      [ 'brew' != "${fz}" ] && . "${completion_dir}/${fz}"
     done
   fi
 done
@@ -153,8 +199,15 @@ if which npmrc-export 2>&1 >/dev/null; then
 fi
 alias nixnm="find . -name "node_modules" -type d -prune -exec rm -rf '{}' +"
 
+nib() {
+  rimraf node_modules build package-lock.json
+  npm install --no-workspaces --no-progress --legacy-peer-deps &&
+    npm run --no-workspaces build
+}
+
 # ecli
-export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.ecli/engineering11-cli.json
+# export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.ecli/engineering11-cli.json
+#[ -f ~/sdk.sh ] && . ~/sdk.sh
 
 # diff
 cdiff() {
@@ -165,9 +218,25 @@ cdiff() {
   left="$1"
   right="$2"
   shift 2
-  diff -u "$right" "$left" "$@" | diff-so-fancy
+  diff -u "$right" "$left" "$@" | diff-so-fancy | less --tabs=4 -RFX
 }
 
 # yarn
 alias yarnroot='eval "cd $(${HOME}/bin/yarnroot/yarnroot)"'
+alias yue="yarn up '@engineering11/*'"
+alias yrb='yarn run build'
 
+# Rust
+. "$HOME/.cargo/env"
+
+# k8s
+alias kc=kubectl
+
+# kind
+alias kn=kind
+
+# docker
+alias dk=docker
+
+
+#source /Users/ttrimmer/.docker/init-bash.sh || true # Added by Docker Desktop

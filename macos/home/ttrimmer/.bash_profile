@@ -12,11 +12,11 @@ case $- in
     *) return;;
 esac
 
-scm_prompt ()
+scm_prompt()
 {
     local CHAR;
     CHAR="$(scm_char)";
-    local format=${SCM_PROMPT_FORMAT:-'[%s%s]'};
+    local format=${SCM_PROMPT_FORMAT:-'[%s][%s]'};
     if [[ "${CHAR}" != "$SCM_NONE_CHAR" ]]; then
         printf "$format\n" "$CHAR" "$(scm_prompt_info)";
     fi
@@ -91,4 +91,29 @@ export SHORT_USER=${USER:0:8}
 
 # Load Bash It
 source "$BASH_IT"/bash_it.sh
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/ttrimmer/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/ttrimmer/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/ttrimmer/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/ttrimmer/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+. "$HOME/.cargo/env"
+
+# Docker
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+PATH=$PATH:/Applications/Docker.app/Contents/Resources/bin
+
+# Grep
+[ -n "${GREP_COLOR}" ] && unset GREP_COLOR
 
