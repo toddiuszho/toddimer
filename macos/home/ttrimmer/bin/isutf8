@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# Is ALL of a file's content valid UTF-8 encoding?
+#
+
+# constants
+COL_CLEAR="\033[0m"
+COL_GREEN="\033[32m"
+COL_RED="\033[31m"
+COL_YELLOW="\033[33m"
+
+# args
+file="$1"
+
+usage() {
+  echo -e "${COL_YELLOW}Usage: isutf FILE${COL_CLEAR}" >&2
+  exit 1
+}
+
+# validate
+[ -n "${file}" ] || usage
+
+# main
+iconv -f UTF-8 -t UTF-8 "$file" >/dev/null 2>&1
+
+# epilogue
+if [ $? -eq 0 ]; then
+  echo -e "${COL_GREEN}Yes, file [${file}] IS valid UTF-8${COL_CLEAR}"
+  exit 0
+fi
+echo -e "${COL_RED}No, file [${file}] is NOT valid UTF-8${COL_CLEAR}"
+exit 1
+
