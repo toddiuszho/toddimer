@@ -19,7 +19,7 @@
 - **monorepo, but focus on single workspace**
   - npm: --no-workspaces
   - yarn: workspaces focus WORKSPACE
-  - npnpm: deploy WORKSPACE
+  - pnpm: deploy WORKSPACE
 - **tooling install**
   - **NODE_PATH** envar
   - **--prefix** install option
