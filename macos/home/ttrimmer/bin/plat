@@ -14,18 +14,20 @@ if ! bash_check; then
   exit 1
 fi
 
-declare -a platforms=(c11oud c2 cnect e11 explainitai graydi ingest isd playbook showcase six11)
+declare -a platforms=(c11oud c2 cnect cindex e11 explainitai graydi ingest isd playbook showcase six11 talorai)
 declare -a environments=(ci dev qa stage prod demo)
 declare -A c11oud_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A cindex_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
 declare -A cnect_stems=([qa]=100 [stage]=100 [prod]=100 [demo]=100)
 declare -A e11_stems=([ci]=100 [dev]=NONE [qa]=NONE [stage]=NONE [prod]=NONE [demo]=NONE)
 declare -A explainitai_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
-declare -A graydi_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
+declare -A graydi_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=NONE [prod]=100 [demo]=NONE)
 declare -A ingest_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
 declare -A isd_stems=([ci]=200 [dev]=200 [qa]=200 [stage]=NONE [prod]=200 [demo]=NONE)
 declare -A playbook_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=100 [prod]=100 [demo]=100)
 declare -A showcase_stems=([ci]=100 [dev]=100 [qa]=NONE [stage]=NONE [prod]=NONE [demo]=NONE)
 declare -A six11_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=NONE [prod]=100 [demo]=100)
+declare -A talorai_stems=([ci]=100 [dev]=100 [qa]=100 [stage]=NONE [prod]=100 [demo]=100)
 declare -A all_stems=()
 declare -A project_prefixes=([playbook]=playbook11 [showcase]=showcase11)
 for p in ${platforms[@]}; do

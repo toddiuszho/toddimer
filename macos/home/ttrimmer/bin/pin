@@ -10,8 +10,22 @@ done
 shift $(( $OPTIND - 1 ))
 OPTIND=0
 
-cmd="$1"
-target="$2"
+if [ 0 -eq $# ]; then
+  cmd='help'
+elif [ 1 -eq $# ]; then
+  if [ 'help' = "$1" ]; then
+    cmd='help'
+  elif [ -e "$1" ]; then
+    cmd='info'
+    target="$1"
+  else
+    cmd="$1"
+    target=''
+  fi
+else
+  cmd="$1"
+  target="$2"
+fi
 s_magic='package.json'
 n_magic="${#s_magic}"
 
