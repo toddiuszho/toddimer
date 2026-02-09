@@ -16,6 +16,7 @@
     hard = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD) && git clean -fd
     logline = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
     new = checkout -b
+    odiff = -c core.pager=less -c color.ui=false diff
     olddiff = -c core.pager=less -c color.ui=false diff
     olediff = -c core.pager=less -c color.ui=false diff
     oldiff = -c core.pager=less -c color.ui=false diff
@@ -36,6 +37,7 @@
     sta = status
     stat = status
     statu = status
+    unstage = restore --staged
 [color]
     ui = true
 [color "diff"]
