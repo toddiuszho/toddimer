@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+. ~/lib/color.sh
+
+# gcloud runs python with -S (site-packages disabled), so its IAP tunnel cannot
+# import numpy and warns about tunnel performance. Homebrew's python3 already has
+# numpy (brew formula), so just let gcloud see it. Scoped to this script rather than
+# exported globally: gcloud disables site-packages on purpose, to avoid collisions
+# with its own vendored libraries in lib/third_party.
+export CLOUDSDK_PYTHON_SITEPACKAGES=1
+
+VM="${CLAUDE_VM:-ds-agent-runner}"
+ZONE="${CLAUDE_VM_ZONE:-us-central1-f}"
+PROJECT="${CLAUDE_VM_PROJECT:-e11cloud-dev-100}"
+SESSION="${1:-$USER}"
+declare -i do_tunnel=0
+
+case "$SESSION" in
+  *[!A-Za-z0-9_-]*|"")
+    echo "session name must be [A-Za-z0-9_-]+, got: $SESSION" >&2
+    exit 1 ;;
+esac
+
+echo -e "${COL_CYAN}[${COL_MAGENTA}${VM}${COL_CYAN}][${COL_MAGENTA}${ZONE}${COL_CYAN}][${COL_MAGENTA}${PROJECT}${COL_CYAN}]${COL_CLEAR}"
+
+declare -a more_opts=()
+if [ $do_tunnel -eq 0 ]; then
+  more_opts+=(--tunnel-through-iap)
+fi
+
+launch() {
+  exec gcloud compute ssh "$VM" \
+    --zone="$ZONE" \
+    --project="$PROJECT" \
+    --ssh-flag="-t" \
+    --ssh-flag="-oServerAliveInterval=30" \
+    --ssh-flag="-oServerAliveCountMax=3" \
+    --command="tmux new-session -A -D -s $SESSION" "${more_opts[@]}"
+}
+
+interactive() {
+  exec gcloud compute ssh "$VM" \
+    --zone="$ZONE" \
+    --ssh-flag="-oServerAliveInterval=30" \
+    --ssh-flag="-oServerAliveCountMax=3" \
+    --project="$PROJECT" "${more_opts[@]}"
+}
+
+# interactive
+launch
+
